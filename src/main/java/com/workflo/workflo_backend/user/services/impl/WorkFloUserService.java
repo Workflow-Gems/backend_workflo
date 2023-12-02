@@ -1,21 +1,30 @@
 package com.workflo.workflo_backend.user.services.impl;
 
+import com.workflo.workflo_backend.appConfig.dtos.request.MailRequest;
+import com.workflo.workflo_backend.appConfig.dtos.request.To;
 import com.workflo.workflo_backend.appConfig.services.CloudService;
-import com.workflo.workflo_backend.exceptions.CloudUploadException;
-import com.workflo.workflo_backend.exceptions.UserNotFoundException;
+import com.workflo.workflo_backend.appConfig.services.MailService;
+import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
-import com.workflo.workflo_backend.user.models.Account;
-import com.workflo.workflo_backend.user.models.Address;
-import com.workflo.workflo_backend.user.models.Profile;
-import com.workflo.workflo_backend.user.models.User;
+import com.workflo.workflo_backend.user.models.*;
 import com.workflo.workflo_backend.user.repository.UserRepository;
+import com.workflo.workflo_backend.user.services.TokenService;
 import com.workflo.workflo_backend.user.services.UserService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.workflo.workflo_backend.user.models.UserStatus.ACTIVE;
+import static com.workflo.workflo_backend.user.models.UserStatus.PENDING;
 
 
 @Service
@@ -25,14 +34,50 @@ public class WorkFloUserService implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final CloudService cloudService;
+    private final TokenService tokenService;
+    private final MailService mailService;
+    private final Context context;
 
     @Override
-    public UserResponse createUser(UserRequest request) {
+    public UserResponse createUser(UserRequest request) throws SendMailException {
+        Optional<User> foundUser = getUserByEmail(request.getEmail());
+        if (foundUser.isPresent()) throw new DuplicatedUserEmailException(
+                String.format("User with this email %s already exist", request.getEmail()));
+        User savedUser = createUserAccount(request);
+        return generatedUserResponse(savedUser);
+    }
+    private User createUserAccount(UserRequest request) throws SendMailException {
         Account account = modelMapper.map(request, Account.class);
         User user = modelMapper.map(request, User.class);
         user.setAccount(account);
+        user.setUserStatus(PENDING);
         User savedUser = userRepository.save(user);
-        return generatedUserResponse(savedUser);
+        createMailRequest(savedUser);
+        return savedUser;
+    }
+    private void createMailRequest(User user) throws SendMailException {
+        String token = tokenService.generateToken(user);
+        String url = String.format("http://localhost:8080/api/v1/register/confirm?email=%s&token=%s",user.getEmail(), token);
+        setContext(user, url);
+    }
+    private void setContext(User user, String url) throws SendMailException {
+        context.setVariables(
+                Map.of("firstName",user.getFirstName(),
+                        "url", url
+                )
+        );
+        sendMailer(user);
+    }
+    private void sendMailer(User user) throws SendMailException {
+        MailRequest request = new MailRequest();
+        request.setSubject("Welcome to WorkFlo...");
+        request.setHtmlContent("");
+        To to = new To(user.getFirstName(), user.getEmail());
+        request.setTo(List.of(to));
+        mailService.sendMail(request, "verification_mail", context);
+    }
+    private Optional<User> getUserByEmail(String email){
+        return userRepository.findUserByEmail(email);
     }
     private static UserResponse generatedUserResponse(User savedUser) {
         return new UserResponse(
@@ -44,7 +89,11 @@ public class WorkFloUserService implements UserService {
     @Override
     public String createAddress(AddressRequest request) throws UserNotFoundException {
         User user = getUser(request.getUserId());
-        Address address = modelMapper.map(request, Address.class);
+        Address address = new Address();
+        address.setCity(request.getCity());
+        address.setCountry(request.getCountry());
+        address.setState(request.getState());
+        address.setZipCode(Long.parseLong(request.getZipCode()));
         user.getAccount().setAddress(address);
         userRepository.save(user);
         return "Address saved successfully...";
@@ -59,9 +108,23 @@ public class WorkFloUserService implements UserService {
         userRepository.save(user);
         return "Profile update successfully...";
     }
+
+    @Override
+    @Transactional
+    public String confirmToken(String email, String token) throws TokenExceptions {
+        String response = tokenService.confirmToken(email, token);
+        if (response != null){
+            Optional<User> foundUser = getUserByEmail(email);
+            User user = foundUser.get();
+            user.setUserStatus(ACTIVE);
+            userRepository.save(user);
+            return response;
+        }
+        throw new TokenExceptions("not valid...");
+    }
+
     private User getUser(Long id) throws UserNotFoundException {
-        User user = userRepository.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found..."));
-        return user;
     }
 }

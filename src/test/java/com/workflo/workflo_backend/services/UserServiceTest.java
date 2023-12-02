@@ -1,8 +1,7 @@
 package com.workflo.workflo_backend.services;
 
 
-import com.workflo.workflo_backend.exceptions.UserNotFoundException;
-import com.workflo.workflo_backend.exceptions.CloudUploadException;
+import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
@@ -29,7 +28,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void createUserTest(){
+    public void createUserTest() throws SendMailException {
         UserRequest request = new UserRequest();
         request.setFirstName("firstName");
         request.setLastName("lastName");
@@ -40,6 +39,16 @@ public class UserServiceTest {
         assertThat(response).isNotNull();
         log.info("id :: {}",response.getId());
         assertThat(response.getId()).isNotNull();
+    }
+    @Test
+    public void duplicateEmailNotAllowed(){
+        UserRequest request = new UserRequest();
+        request.setFirstName("firstName");
+        request.setLastName("lastName");
+        request.setEmail("leumasre@gmail.com");
+        request.setPassword("Password12@");
+        request.setPhoneNumber("08063587905");
+        assertThrows(DuplicatedUserEmailException.class, ()->userService.createUser(request));
     }
 
     @Test
@@ -68,6 +77,14 @@ public class UserServiceTest {
 
         String response = userService.createProfile(request);
         log.info("response :: {}", response);
+        assertThat(response).isNotNull();
+    }
+
+    @Test
+    public void confirmToken() throws TokenExceptions {
+        String email = "pijog53310@frandin.com";
+        String token = "735fc9fa-2208-4ddb-8b06-b3f70e21cd7c";
+        String response = userService.confirmToken(email, token);
         assertThat(response).isNotNull();
     }
 }

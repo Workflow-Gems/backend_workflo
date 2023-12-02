@@ -12,6 +12,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import static java.net.URI.create;
 import static org.springframework.http.HttpMethod.POST;
@@ -21,8 +23,11 @@ import static org.springframework.http.HttpMethod.POST;
 @AllArgsConstructor
 public class WorkFloMailService implements MailService {
     private final MailConfig mailConfig;
+    private final TemplateEngine templateEngine;
     @Override
-    public MailResponse sendMail(MailRequest request) throws SendMailException {
+    public MailResponse sendMail(MailRequest request, String template, Context context) throws SendMailException {
+        final String content = templateEngine.process(template,context);
+        request.setHtmlContent(content);
         try {
             HttpEntity<MailRequest> httpEntity = new RequestEntity<>(
                     request, mailConfig.httpHeaders(), POST, create("")
@@ -30,7 +35,7 @@ public class WorkFloMailService implements MailService {
             ResponseEntity<MailResponse> responseEntity =
                     mailConfig.restTemplate().postForEntity(mailConfig.getUrl(), httpEntity, MailResponse.class);
             MailResponse response = responseEntity.getBody();
-            response.setStatusCode(Long.valueOf(responseEntity.getStatusCode().value()));
+            response.setStatusCode((long) responseEntity.getStatusCode().value());
             return response;
         }catch (HttpClientErrorException exception){
             throw new SendMailException(exception.getMessage());

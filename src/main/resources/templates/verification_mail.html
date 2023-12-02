@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title style="text-align: center" >Verify Your Account</title>
+</head>
+<body>
+    <h4>Dear [[${firstName}]]</h4>,
+    <p>Welcome to WorkFlo where we connect projects to resources.</p><br>
+    <p>To continue to enjoy our services, kindly click on the button below to get verified</p><br>
+    <a th:href="${url}"><button style="background-color: #ca33f8">Verify</button></a><br>
+    <p>the link expires in 30 mins.</p>
+</body>
+</html>

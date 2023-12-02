@@ -26,5 +26,5 @@ public class Address {
 //    @Column(length = 100)
     private String country;
 //    @Column(length = 10)
-    private Integer zipCode;
+    private Long zipCode;
 }
