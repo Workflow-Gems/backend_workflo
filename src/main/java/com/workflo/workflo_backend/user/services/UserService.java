@@ -19,7 +19,7 @@ public interface UserService {
 
     String createProfile(ProfileRequest request) throws UserNotFoundException, CloudUploadException;
 
-    String confirmToken(String email, String token) throws TokenExceptions;
+    String confirmToken(String email, String token) throws TokenExceptions, SendMailException;
 
 
     default ProfileRequest buildProfileRequest(MultipartFile image,
