@@ -49,7 +49,7 @@ public class WorkFloUserService implements UserService {
     }
 
     @Transactional
-    private User createUserAccount(UserRequest request) throws SendMailException {
+    public User createUserAccount(UserRequest request) throws SendMailException {
         Account account = modelMapper.map(request, Account.class);
         User user = modelMapper.map(request, User.class);
         user.setAccount(account);
@@ -60,7 +60,8 @@ public class WorkFloUserService implements UserService {
     }
     private void createMailRequest(User user) throws SendMailException {
         String token = tokenService.generateToken(user);
-        String url = String.format("http://localhost:8080/api/v1/register/confirm?email=%s&token=%s",user.getEmail(), token);
+        String locator = "http://localhost:8080/api/v1/user/confirm?email=%s&token=%s";
+        String url = String.format(locator,user.getEmail(), token);
         setContext(user, url);
     }
     private void setContext(User user, String url) throws SendMailException {
@@ -69,15 +70,25 @@ public class WorkFloUserService implements UserService {
                         "url", url
                 )
         );
-        sendMailer(user);
+        String template = "verification_mail";
+       createMailerRequest(user, template);
     }
-    private void sendMailer(User user) throws SendMailException {
+    private void setContext(User user) throws SendMailException {
+        context.setVariable("firstName", user.getFirstName());
+        String template = "token_confirmed";
+        createMailerRequest(user, template);
+    }
+
+    private void createMailerRequest(User user, String template) throws SendMailException {
         MailRequest request = new MailRequest();
         request.setSubject("Welcome to WorkFlo...");
         request.setHtmlContent("");
         To to = new To(user.getFirstName(), user.getEmail());
         request.setTo(List.of(to));
-        mailService.sendMail(request, "verification_mail", context);
+        sendMailer(request, template);
+    }
+    private void sendMailer(MailRequest request, String template) throws SendMailException {
+        mailService.sendMail(request, template, context);
     }
     private Optional<User> getUserByEmail(String email){
         return userRepository.findUserByEmail(email);
@@ -114,13 +125,14 @@ public class WorkFloUserService implements UserService {
 
     @Override
     @Transactional
-    public String confirmToken(String email, String token) throws TokenExceptions {
+    public String confirmToken(String email, String token) throws TokenExceptions, SendMailException {
         String response = tokenService.confirmToken(email, token);
         if (response != null){
             Optional<User> foundUser = getUserByEmail(email);
             User user = foundUser.get();
             user.setUserStatus(ACTIVE);
-            userRepository.save(user);
+            User savedUser = userRepository.save(user);
+            setContext(savedUser);
             return response;
         }
         throw new TokenExceptions("not valid...");

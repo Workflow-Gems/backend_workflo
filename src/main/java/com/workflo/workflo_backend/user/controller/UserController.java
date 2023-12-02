@@ -42,7 +42,8 @@ public class UserController {
     @GetMapping("/user/confirm")
     public ResponseEntity<String> confirmUserEmail(@RequestParam("email") String email,
                                                    @RequestParam("token") String token)
-                                                                             throws TokenExceptions {
+                                                                            throws TokenExceptions,
+                                                                                   SendMailException {
         return ResponseEntity.ok().body(userService.confirmToken(email, token));
     }
     @PostMapping(path = "/user/profile",consumes = MULTIPART_FORM_DATA_VALUE )
