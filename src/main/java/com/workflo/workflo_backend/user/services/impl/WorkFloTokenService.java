@@ -16,8 +16,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.time.LocalTime.now;
-
-
 @Slf4j
 @Service
 @Lazy
