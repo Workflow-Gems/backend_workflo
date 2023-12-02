@@ -39,6 +39,7 @@ public class WorkFloUserService implements UserService {
     private final Context context;
 
     @Override
+    @Transactional
     public UserResponse createUser(UserRequest request) throws SendMailException {
         Optional<User> foundUser = getUserByEmail(request.getEmail());
         if (foundUser.isPresent()) throw new DuplicatedUserEmailException(
@@ -46,6 +47,8 @@ public class WorkFloUserService implements UserService {
         User savedUser = createUserAccount(request);
         return generatedUserResponse(savedUser);
     }
+
+    @Transactional
     private User createUserAccount(UserRequest request) throws SendMailException {
         Account account = modelMapper.map(request, Account.class);
         User user = modelMapper.map(request, User.class);

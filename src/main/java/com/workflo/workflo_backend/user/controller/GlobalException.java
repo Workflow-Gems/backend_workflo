@@ -1,22 +1,20 @@
 package com.workflo.workflo_backend.user.controller;
 
 
-import com.workflo.workflo_backend.exceptions.CloudUploadException;
-import com.workflo.workflo_backend.exceptions.DuplicatedUserEmailException;
-import com.workflo.workflo_backend.exceptions.SendMailException;
-import com.workflo.workflo_backend.exceptions.UserNotFoundException;
+import com.workflo.workflo_backend.exceptions.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.time.LocalDate.now;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @RestControllerAdvice
 public class GlobalException {
@@ -29,7 +27,7 @@ public class GlobalException {
         );
         ErrorMessage message = ErrorMessage.builder()
                 .message(error).status(BAD_GATEWAY)
-                .date(LocalDate.now()).time(LocalTime.now()).build();
+                .date(now()).time(LocalTime.now()).build();
         return ResponseEntity.badRequest().body(message);
     }
     @ExceptionHandler(UserNotFoundException.class)
@@ -38,7 +36,7 @@ public class GlobalException {
         error.put("message", exception.getMessage());
         ErrorMessage message = ErrorMessage.builder()
                 .message(error).status(BAD_GATEWAY)
-                .date(LocalDate.now()).time(LocalTime.now()).build();
+                .date(now()).time(LocalTime.now()).build();
         return ResponseEntity.badRequest().body(message);
     }
 
@@ -50,7 +48,7 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(new ErrorMessage(
                 error,
                 BAD_GATEWAY,
-                LocalDate.now(),
+                now(),
                 LocalTime.now()
         ));
     }
@@ -63,7 +61,7 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(new ErrorMessage(
                 error,
                 BAD_GATEWAY,
-                LocalDate.now(),
+                now(),
                 LocalTime.now()
         ));
     }
@@ -76,8 +74,20 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(new ErrorMessage(
                 error,
                 BAD_GATEWAY,
-                LocalDate.now(),
+                now(),
                 LocalTime.now()
         ));
+    }
+
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(TokenExceptions.class)
+    public ResponseEntity<ErrorMessage> tokenError(TokenExceptions exceptions){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exceptions.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.badRequest().body(errorMessage);
     }
 }

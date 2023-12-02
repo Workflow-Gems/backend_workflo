@@ -32,9 +32,9 @@ public class UserServiceTest {
         UserRequest request = new UserRequest();
         request.setFirstName("firstName");
         request.setLastName("lastName");
-        request.setEmail("leumasre@gmail.com");
+        request.setEmail("aiyeboy@gmail.com");
         request.setPassword("Password12@");
-        request.setPhoneNumber("08063587905");
+        request.setPhoneNumber("08083587905");
         UserResponse response = userService.createUser(request);
         assertThat(response).isNotNull();
         log.info("id :: {}",response.getId());
