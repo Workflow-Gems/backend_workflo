@@ -9,6 +9,7 @@ import com.workflo.workflo_backend.exceptions.SendMailException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.thymeleaf.context.Context;
 
 import java.util.List;
 
@@ -23,12 +24,13 @@ public class MailServiceTest {
 
     @Test
     public void sendMailTest() throws SendMailException {
+        Context context = new Context();
         To to = new To("name","pijog53310@frandin.com");
         MailRequest request = new MailRequest();
         request.setHtmlContent("html");
         request.setSubject("subject");
         request.setTo(List.of(to));
-        MailResponse response = mailService.sendMail(request);
+        MailResponse response = mailService.sendMail(request, "", context);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isGreaterThanOrEqualTo(200);
     }
