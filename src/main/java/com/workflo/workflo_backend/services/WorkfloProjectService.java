@@ -21,15 +21,6 @@ public class WorkfloProjectService implements ProjectService{
 
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public WorkfloProjectService(ProjectRepository projectRepository,
-                                 UserService userService,
-                                 ModelMapper modelMapper) {
-        this.projectRepository = projectRepository;
-        this.userService = userService;
-        this.modelMapper = modelMapper;
-    }
-
     public CreateProjectResponse createProject(CreateProjectRequest request) {
 
         // THIS IS where we should talk about DELE coz I see that you used a
