@@ -5,10 +5,10 @@ import com.workflo.workflo_backend.exceptions.SendMailException;
 import com.workflo.workflo_backend.exceptions.TokenExceptions;
 import com.workflo.workflo_backend.exceptions.UserNotFoundException;
 import com.workflo.workflo_backend.user.dtos.request.*;
+import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,4 +35,6 @@ public interface UserService {
         request.setJobTitle(jobTitle);
         return request;
     }
+
+    FoundUserResponse findProjectedUserById(Long id) throws UserNotFoundException;
 }

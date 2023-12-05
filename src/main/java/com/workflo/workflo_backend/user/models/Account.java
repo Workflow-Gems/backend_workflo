@@ -2,10 +2,7 @@ package com.workflo.workflo_backend.user.models;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.EAGER;
@@ -13,6 +10,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @AllArgsConstructor
+@ToString
 @Getter@Setter
 @NoArgsConstructor
 public class Account {

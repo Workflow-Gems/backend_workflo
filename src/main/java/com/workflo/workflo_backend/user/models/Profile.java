@@ -1,11 +1,12 @@
 package com.workflo.workflo_backend.user.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +26,8 @@ public class Profile {
 //    @Column(name = "job_title", updatable = true, length = 100)
     private String jobTitle;
     @ElementCollection
-    private List<String> skills = new ArrayList<>();
+    private List<String> skills;
     @ElementCollection
 //    @MapKeyJoinColumn(name = "portfolio_title")
-    private Map<String, String> portFolio = new HashMap<>();
+    private Map<String, String> portFolio;
 }

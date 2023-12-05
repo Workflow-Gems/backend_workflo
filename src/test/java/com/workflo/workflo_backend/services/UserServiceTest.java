@@ -5,6 +5,7 @@ import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
+import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
 import com.workflo.workflo_backend.user.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import static com.workflo.workflo_backend.services.app.CloudServiceTest.createMultipart;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -32,7 +34,7 @@ public class UserServiceTest {
         UserRequest request = new UserRequest();
         request.setFirstName("firstName");
         request.setLastName("lastName");
-        request.setEmail("aiyeboy@gmail.com");
+        request.setEmail("telopan780@hupoi.com");
         request.setPassword("Password12@");
         request.setPhoneNumber("08083587905");
         UserResponse response = userService.createUser(request);
@@ -81,10 +83,24 @@ public class UserServiceTest {
     }
 
     @Test
-    public void confirmToken() throws TokenExceptions {
+    public void confirmToken() throws TokenExceptions, SendMailException {
         String email = "pijog53310@frandin.com";
         String token = "735fc9fa-2208-4ddb-8b06-b3f70e21cd7c";
         String response = userService.confirmToken(email, token);
         assertThat(response).isNotNull();
+    }
+
+    @Test
+    public void findUserWithId() throws UserNotFoundException {
+        Long id = 1L;
+        FoundUserResponse response = userService.findProjectedUserById(id);
+        assertThat(response).isNotNull();
+        log.info("projection :: {}", response.toString());
+        log.info("projection email :: {}", response.getEmail());
+        log.info("projection account :: {}", response.getAccount().toString());
+//        log.info("projection profile :: {}", response.getAccount().getProfile().toString());
+//        log.info("projection profile :: {}", response.getAccount().getAddress().toString());
+        assertThat(response.getFirstName()).isNotNull();
+        assertEquals("firstName", response.getFirstName());
     }
 }

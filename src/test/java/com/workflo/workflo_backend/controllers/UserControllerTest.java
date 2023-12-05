@@ -51,8 +51,6 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
-
-
     @Test
     public void createAddressTest() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
@@ -112,6 +110,12 @@ public class UserControllerTest {
                         .part(new MockPart("jobTitle", "job-title".getBytes()))
                         .part(new MockPart("skills", list.toString().getBytes()))
                         .contentType(MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+    }
+    @Test
+    public void getUserByIdTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/1"))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
     }

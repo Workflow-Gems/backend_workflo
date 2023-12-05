@@ -8,6 +8,7 @@ import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
+import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
 import com.workflo.workflo_backend.user.models.*;
 import com.workflo.workflo_backend.user.repository.UserRepository;
@@ -138,6 +139,11 @@ public class WorkFloUserService implements UserService {
         throw new TokenExceptions("not valid...");
     }
 
+    @Override
+    public FoundUserResponse findProjectedUserById(Long id) throws UserNotFoundException {
+       User user = getUser(id);
+       return modelMapper.map(user, FoundUserResponse.class);
+    }
     private User getUser(Long id) throws UserNotFoundException {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found..."));
