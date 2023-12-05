@@ -8,6 +8,7 @@ import com.workflo.workflo_backend.exceptions.UserNotFoundException;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
+import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
 import com.workflo.workflo_backend.user.services.UserService;
 import jakarta.validation.Valid;
@@ -58,5 +59,10 @@ public class UserController {
         ProfileRequest request = userService.buildProfileRequest(image, id,portfolio, about, jobTitle, skills);
         String response = userService.createProfile(request);
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<FoundUserResponse> getUserById(@PathVariable Long id) throws UserNotFoundException {
+        return ResponseEntity.ok().body(userService.findProjectedUserById(id));
     }
 }
