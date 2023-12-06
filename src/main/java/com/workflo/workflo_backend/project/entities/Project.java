@@ -1,6 +1,7 @@
 package com.workflo.workflo_backend.project.entities;
 
 
+import com.workflo.workflo_backend.join_project.models.JoinProject;
 import com.workflo.workflo_backend.user.models.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -41,4 +42,7 @@ public class Project {
     private LocalDate dateCreated;
     @Enumerated(STRING)
     private ProjectStatus projectStatus;
+
+    @OneToMany(mappedBy = "project")
+    private List<JoinProject> projectRequest;
 }

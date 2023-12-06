@@ -16,5 +16,4 @@ public class ProfileResponse {
     private String jobTitle;
     private List<String> skills;
     private Map<String, String> portFolio;
-
 }
