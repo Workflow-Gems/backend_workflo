@@ -1,8 +1,6 @@
 package com.workflo.workflo_backend.project.service;
 
-import com.workflo.workflo_backend.exceptions.CloudUploadException;
-import com.workflo.workflo_backend.exceptions.UserNotFoundException;
-import com.workflo.workflo_backend.exceptions.UserNotVerifiedException;
+import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.project.dtos.request.CreateProject;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
@@ -13,7 +11,7 @@ import java.util.List;
 public interface ProjectService {
     ProjectResponse createProject(CreateProject createProject) throws UserNotFoundException,
                                                                       CloudUploadException,
-                                                                      UserNotVerifiedException;
+                                                                      UserNotVerifiedException, WorkFloException;
 
     default CreateProject createProjectDTO(MultipartFile image,
                                            Long id,
@@ -52,4 +50,5 @@ public interface ProjectService {
         return project;
     }
 
+    String deleteProject(Long userId, Long projectId) throws UserNotFoundException, ProjectNotExistException, ProjectAndUserNotMatchException, WorkFloException;
 }

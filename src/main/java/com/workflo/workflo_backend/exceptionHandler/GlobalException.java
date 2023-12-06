@@ -101,4 +101,27 @@ public class GlobalException {
         );
         return ResponseEntity.badRequest().body(errorMessage);
     }
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(ProjectNotExistException.class)
+    public ResponseEntity<ErrorMessage> unverified(ProjectNotExistException exceptions){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exceptions.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.badRequest().body(errorMessage);
+    }
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(ProjectAndUserNotMatchException.class)
+    public ResponseEntity<ErrorMessage> unverified(ProjectAndUserNotMatchException exceptions){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exceptions.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.badRequest().body(errorMessage);
+    }
+
 }

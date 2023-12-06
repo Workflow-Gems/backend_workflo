@@ -1,9 +1,10 @@
 package com.workflo.workflo_backend.project.service.impl;
 
 import com.workflo.workflo_backend.appConfig.services.CloudService;
-import com.workflo.workflo_backend.exceptions.CloudUploadException;
-import com.workflo.workflo_backend.exceptions.UserNotFoundException;
+import com.workflo.workflo_backend.exceptions.ProjectAndUserNotMatchException;
+import com.workflo.workflo_backend.exceptions.ProjectNotExistException;
 import com.workflo.workflo_backend.exceptions.UserNotVerifiedException;
+import com.workflo.workflo_backend.exceptions.WorkFloException;
 import com.workflo.workflo_backend.project.dtos.request.CreateProject;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.Project;
@@ -29,20 +30,32 @@ public class WorkFloProjectService implements ProjectService {
     private final UserService userService;
     private final CloudService cloudService;
     @Override
-    public ProjectResponse createProject(CreateProject createProject) throws UserNotFoundException, CloudUploadException, UserNotVerifiedException {
+    public ProjectResponse createProject(CreateProject createProject) throws WorkFloException {
         User user = userService.getUserById(createProject.getUserCreatorId());
         if (user.isEnabled() && user.getUserStatus() == ACTIVE) {
             Project project = new Project();
-            if (createProject.getImage() != null) {
-                project.setImage(cloudService.upload(createProject.getImage()));
-            }
+            if (createProject.getImage() != null) project.setImage(cloudService.upload(createProject.getImage()));
             Project savedProject = generateProject(createProject, project, user);
-            ProjectResponse response = new ProjectResponse();
-            response.setId(savedProject.getId());
-            return response;
+            return new ProjectResponse(savedProject.getId());
         }
         throw new UserNotVerifiedException(String
                 .format("dear %s, kindly fill update your profile...", user.getFirstName()));
+    }
+
+    @Override
+    public String deleteProject(Long userId, Long projectId) throws WorkFloException {
+        User user = userService.getUserById(userId);
+        Project project = findProjectById(projectId);
+        if (project.getCreatorId().equals(user)){
+            repository.delete(project);
+            return "Successfully deleted...";
+        }
+        throw new ProjectAndUserNotMatchException("error, it happens that you did not create this particular project...");
+    }
+
+    private Project findProjectById(Long id) throws ProjectNotExistException {
+        return repository.findById(id)
+                .orElseThrow(()-> new ProjectNotExistException("Project with this id does not exist..."));
     }
 
     private Project generateProject(CreateProject createProject, Project project, User user) {
