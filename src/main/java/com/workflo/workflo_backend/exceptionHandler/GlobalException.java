@@ -1,4 +1,4 @@
-package com.workflo.workflo_backend.user.controller;
+package com.workflo.workflo_backend.exceptionHandler;
 
 
 import com.workflo.workflo_backend.exceptions.*;
@@ -82,6 +82,17 @@ public class GlobalException {
     @ResponseStatus(FORBIDDEN)
     @ExceptionHandler(TokenExceptions.class)
     public ResponseEntity<ErrorMessage> tokenError(TokenExceptions exceptions){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exceptions.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.badRequest().body(errorMessage);
+    }
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(UserNotVerifiedException.class)
+    public ResponseEntity<ErrorMessage> unverified(UserNotVerifiedException exceptions){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
                 FORBIDDEN,

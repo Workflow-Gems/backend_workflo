@@ -1,4 +1,4 @@
-package com.workflo.workflo_backend.user.controller;
+package com.workflo.workflo_backend.exceptionHandler;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

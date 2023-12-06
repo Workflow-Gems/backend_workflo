@@ -1,10 +1,7 @@
 package com.workflo.workflo_backend.user.controller;
 
 
-import com.workflo.workflo_backend.exceptions.CloudUploadException;
-import com.workflo.workflo_backend.exceptions.SendMailException;
-import com.workflo.workflo_backend.exceptions.TokenExceptions;
-import com.workflo.workflo_backend.exceptions.UserNotFoundException;
+import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
@@ -21,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -47,20 +44,32 @@ public class UserController {
                                                                                    SendMailException {
         return ResponseEntity.ok().body(userService.confirmToken(email, token));
     }
-    @PostMapping(path = "/user/profile",consumes = MULTIPART_FORM_DATA_VALUE )
-    public ResponseEntity<String> createProfile(@RequestParam("image") MultipartFile image,
+    @PostMapping(path = "/user/profile", consumes = MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> createProfile(@RequestParam(value = "image", required = false) MultipartFile image,
                                                 @RequestParam("id") Long id,
                                                 @RequestParam Map<String, String> portfolio,
                                                 @RequestParam("about") String about,
                                                 @RequestParam("jobTitle") String jobTitle,
                                                 @RequestParam("skills") List<String> skills)
-                                                                                throws UserNotFoundException,
-                                                                                       CloudUploadException {
-        ProfileRequest request = userService.buildProfileRequest(image, id,portfolio, about, jobTitle, skills);
+                                                                        throws UserNotFoundException,
+            CloudUploadException, UserNotVerifiedException {
+        ProfileRequest request = userService.buildProfileRequest(image, id, portfolio, about, jobTitle, skills);
         String response = userService.createProfile(request);
         return ResponseEntity.ok().body(response);
     }
-
+    @PostMapping(path = "/user/profile")
+    public ResponseEntity<String> createProfile(@RequestParam("id") Long id,
+                                                @RequestParam Map<String, String> portfolio,
+                                                @RequestParam("about") String about,
+                                                @RequestParam("jobTitle") String jobTitle,
+                                                @RequestParam("skills") List<String> skills)
+                                                                        throws UserNotFoundException,
+                                                                               CloudUploadException,
+                                                                               UserNotVerifiedException {
+        ProfileRequest request = userService.buildProfileRequest(id,portfolio, about, jobTitle, skills);
+        String response = userService.createProfile(request);
+        return ResponseEntity.ok().body(response);
+    }
     @GetMapping("/user/{id}")
     public ResponseEntity<FoundUserResponse> getUserById(@PathVariable Long id) throws UserNotFoundException {
         return ResponseEntity.ok().body(userService.findProjectedUserById(id));
