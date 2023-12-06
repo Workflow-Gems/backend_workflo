@@ -39,7 +39,7 @@ public class WorkFloJoinRequestService implements JoinRequestService {
         User user = userService.getUserById(request.getUserId());
         if (user.isEnabled()) {
             Project project = projectService.findProjectById(request.getProjectId());
-            if (project.getCreatorId().equals(user)) {
+            if (!project.getCreatorId().equals(user)) {
                 JoinProject joinProject = createJoinRequest(request, project, user);
                 JoinProject savedRequest = repository.save(joinProject);
                 setContext(project,request,user);
