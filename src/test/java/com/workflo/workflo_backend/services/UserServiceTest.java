@@ -34,7 +34,7 @@ public class UserServiceTest {
         UserRequest request = new UserRequest();
         request.setFirstName("firstName");
         request.setLastName("lastName");
-        request.setEmail("telopan780@hupoi.com");
+        request.setEmail("banjo.oladele.samuel@gmail.com");
         request.setPassword("Password12@");
         request.setPhoneNumber("08083587905");
         UserResponse response = userService.createUser(request);
@@ -52,7 +52,6 @@ public class UserServiceTest {
         request.setPhoneNumber("08063587905");
         assertThrows(DuplicatedUserEmailException.class, ()->userService.createUser(request));
     }
-
     @Test
     public void createAddress() throws UserNotFoundException {
         AddressRequest request = AddressRequest
@@ -67,21 +66,18 @@ public class UserServiceTest {
         log.info("response :: {}", response);
         assertThat(response).isNotNull();
     }
-
     @Test
-    public void profileCannotBeCreatedIfNoAccount() throws CloudUploadException, UserNotFoundException {
+    public void profileCannotBeCreatedIfNoAccount() throws CloudUploadException, UserNotFoundException, UserNotVerifiedException {
         ProfileRequest request = new ProfileRequest();
         request.setUserId(1L);
         request.setAbout("about");
         request.setSkills(List.of("skills"));
-        request.setImage(createMultipart());
         request.setPortfolio(Map.of("k", "v"));
 
         String response = userService.createProfile(request);
         log.info("response :: {}", response);
         assertThat(response).isNotNull();
     }
-
     @Test
     public void confirmToken() throws TokenExceptions, SendMailException {
         String email = "pijog53310@frandin.com";
@@ -89,7 +85,6 @@ public class UserServiceTest {
         String response = userService.confirmToken(email, token);
         assertThat(response).isNotNull();
     }
-
     @Test
     public void findUserWithId() throws UserNotFoundException {
         Long id = 1L;
@@ -98,8 +93,6 @@ public class UserServiceTest {
         log.info("projection :: {}", response.toString());
         log.info("projection email :: {}", response.getEmail());
         log.info("projection account :: {}", response.getAccount().toString());
-//        log.info("projection profile :: {}", response.getAccount().getProfile().toString());
-//        log.info("projection profile :: {}", response.getAccount().getAddress().toString());
         assertThat(response.getFirstName()).isNotNull();
         assertEquals("firstName", response.getFirstName());
     }

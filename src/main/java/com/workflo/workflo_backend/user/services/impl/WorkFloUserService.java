@@ -48,7 +48,6 @@ public class WorkFloUserService implements UserService {
         User savedUser = createUserAccount(request);
         return generatedUserResponse(savedUser);
     }
-
     @Transactional
     public User createUserAccount(UserRequest request) throws SendMailException {
         Account account = modelMapper.map(request, Account.class);
@@ -79,7 +78,6 @@ public class WorkFloUserService implements UserService {
         String template = "token_confirmed";
         createMailerRequest(user, template);
     }
-
     private void createMailerRequest(User user, String template) throws SendMailException {
         MailRequest request = new MailRequest();
         request.setSubject("Welcome to WorkFlo...");
@@ -103,7 +101,7 @@ public class WorkFloUserService implements UserService {
     }
     @Override
     public String createAddress(AddressRequest request) throws UserNotFoundException {
-        User user = getUser(request.getUserId());
+        User user = getUserById(request.getUserId());
         Address address = new Address();
         address.setCity(request.getCity());
         address.setCountry(request.getCountry());
@@ -114,16 +112,22 @@ public class WorkFloUserService implements UserService {
         return "Address saved successfully...";
     }
     @Override
-    public String createProfile(ProfileRequest request) throws UserNotFoundException, CloudUploadException {
-        User user = getUser(request.getUserId());
-        String image = cloudService.upload(request.getImage());
-        Profile profile = modelMapper.map(request, Profile.class);
-        profile.setImage(image);
-        user.getAccount().setProfile(profile);
-        userRepository.save(user);
-        return "Profile update successfully...";
+    public String createProfile(ProfileRequest request) throws UserNotFoundException, CloudUploadException, UserNotVerifiedException {
+        User user = getUserById(request.getUserId());
+        if (user.getUserStatus() == ACTIVE) {
+            Profile profile = modelMapper.map(request, Profile.class);
+            if (request.getImage() != null) {
+                String image = cloudService.upload(request.getImage());
+                profile.setImage(image);
+            }
+            user.getAccount().setProfile(profile);
+            user.setEnabled(!user.isEnabled());
+            userRepository.save(user);
+            return "Profile update successfully...";
+        }
+        throw new UserNotVerifiedException(String
+                .format("dear %s,kindly check your mail to confirm email before you can continue", user.getFirstName()));
     }
-
     @Override
     @Transactional
     public String confirmToken(String email, String token) throws TokenExceptions, SendMailException {
@@ -138,13 +142,12 @@ public class WorkFloUserService implements UserService {
         }
         throw new TokenExceptions("not valid...");
     }
-
     @Override
     public FoundUserResponse findProjectedUserById(Long id) throws UserNotFoundException {
-       User user = getUser(id);
+       User user = getUserById(id);
        return modelMapper.map(user, FoundUserResponse.class);
     }
-    private User getUser(Long id) throws UserNotFoundException {
+    public User getUserById(Long id) throws UserNotFoundException {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found..."));
     }

@@ -13,7 +13,8 @@ spring:
 
 #  jpa:
 #    database: mysql
-
+#  config:
+#    location: classpath:/src/main/resources/workflo.yaml
 #cloudinary service
 cloudinary:
   cloud:

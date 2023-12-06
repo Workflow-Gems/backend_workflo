@@ -1,5 +1,6 @@
 package com.workflo.workflo_backend.user.models;
 
+import com.workflo.workflo_backend.project.entities.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,10 +8,12 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.EAGER;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 
@@ -18,7 +21,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter@Setter
 @ToString
 public class User {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -38,4 +40,8 @@ public class User {
     private UserStatus userStatus;
     @Column(name = "is_enabled")
     private boolean enabled = false;
+    @OneToMany(mappedBy = "creatorId", cascade = ALL, fetch = LAZY)
+    private Set<Project> createdProjects;
+    @ManyToMany(mappedBy = "members", cascade = ALL, fetch = LAZY)
+    private Set<Project> joinedProjects;
 }

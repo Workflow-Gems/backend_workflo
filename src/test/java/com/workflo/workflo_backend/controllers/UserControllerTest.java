@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.workflo.workflo_backend.services.app.CloudServiceTest.createMultipart;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -110,6 +109,23 @@ public class UserControllerTest {
                         .part(new MockPart("jobTitle", "job-title".getBytes()))
                         .part(new MockPart("skills", list.toString().getBytes()))
                         .contentType(MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+    }
+    @Test
+    public void createProfile() throws CloudUploadException, Exception {
+        List<String> list = List.of("skills");
+        Map<String, String> map = Map.of("key", "value");
+
+        String parsed = JSONObject.toJSONString(map);
+
+        mockMvc.perform(multipart("/api/v1/user/profile")
+                        .part(new MockPart("id", new byte[]{49}))
+                        .part(new MockPart("about", "about".getBytes()))
+                        .part(new MockPart("portfolio", parsed.getBytes()))
+                        .part(new MockPart("jobTitle", "job-title".getBytes()))
+                        .part(new MockPart("skills", list.toString().getBytes()))
+                        .contentType(APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
     }
