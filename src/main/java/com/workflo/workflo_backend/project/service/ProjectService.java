@@ -3,6 +3,7 @@ package com.workflo.workflo_backend.project.service;
 import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.project.dtos.request.CreateProject;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
+import com.workflo.workflo_backend.project.entities.Project;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,4 +52,6 @@ public interface ProjectService {
     }
 
     String deleteProject(Long userId, Long projectId) throws UserNotFoundException, ProjectNotExistException, ProjectAndUserNotMatchException, WorkFloException;
+
+    Project findProjectById(Long projectId) throws WorkFloException;
 }

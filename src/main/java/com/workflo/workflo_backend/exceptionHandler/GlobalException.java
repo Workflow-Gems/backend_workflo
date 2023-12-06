@@ -39,7 +39,6 @@ public class GlobalException {
                 .date(now()).time(LocalTime.now()).build();
         return ResponseEntity.badRequest().body(message);
     }
-
     @ResponseStatus(BAD_GATEWAY)
     @ExceptionHandler(DuplicatedUserEmailException.class)
     public ResponseEntity<ErrorMessage> duplicateUser(DuplicatedUserEmailException exception){
@@ -52,7 +51,6 @@ public class GlobalException {
                 LocalTime.now()
         ));
     }
-
     @ResponseStatus(BAD_GATEWAY)
     @ExceptionHandler(SendMailException.class)
     public ResponseEntity<ErrorMessage> mailerException(SendMailException exception){
@@ -65,7 +63,6 @@ public class GlobalException {
                 LocalTime.now()
         ));
     }
-
     @ResponseStatus(BAD_GATEWAY)
     @ExceptionHandler(CloudUploadException.class)
     public ResponseEntity<ErrorMessage> cloudUpload(CloudUploadException exception){
@@ -78,7 +75,6 @@ public class GlobalException {
                 LocalTime.now()
         ));
     }
-
     @ResponseStatus(FORBIDDEN)
     @ExceptionHandler(TokenExceptions.class)
     public ResponseEntity<ErrorMessage> tokenError(TokenExceptions exceptions){
@@ -114,7 +110,18 @@ public class GlobalException {
     }
     @ResponseStatus(FORBIDDEN)
     @ExceptionHandler(ProjectAndUserNotMatchException.class)
-    public ResponseEntity<ErrorMessage> unverified(ProjectAndUserNotMatchException exceptions){
+    public ResponseEntity<ErrorMessage> projectNotMatch(ProjectAndUserNotMatchException exceptions){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exceptions.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.badRequest().body(errorMessage);
+    }
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(ProjectOwnerException.class)
+    public ResponseEntity<ErrorMessage> projectOwner(ProjectOwnerException exceptions){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
                 FORBIDDEN,

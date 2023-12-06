@@ -53,7 +53,7 @@ public class WorkFloProjectService implements ProjectService {
         throw new ProjectAndUserNotMatchException("error, it happens that you did not create this particular project...");
     }
 
-    private Project findProjectById(Long id) throws ProjectNotExistException {
+    public Project findProjectById(Long id) throws WorkFloException {
         return repository.findById(id)
                 .orElseThrow(()-> new ProjectNotExistException("Project with this id does not exist..."));
     }

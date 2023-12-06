@@ -8,10 +8,7 @@ import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import com.workflo.workflo_backend.project.service.ProjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -45,5 +42,10 @@ public class ProjectController {
                                                                                                             throws WorkFloException {
         CreateProject project = projectService.createProjectDTO(id, projectName, summary, description, category, skills);
         return ResponseEntity.status(201).body(projectService.createProject(project));
+    }
+    @DeleteMapping("/{userId}/{projectId}")
+    public ResponseEntity<String> deleteProject(@PathVariable("userId") Long userId,
+                                                @PathVariable("projectId") Long projectId) throws WorkFloException {
+        return ResponseEntity.ok().body(projectService.deleteProject(userId, projectId));
     }
 }

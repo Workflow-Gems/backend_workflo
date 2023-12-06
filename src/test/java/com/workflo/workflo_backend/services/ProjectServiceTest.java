@@ -116,7 +116,7 @@ public class ProjectServiceTest {
         assertThrows(ProjectNotExistException.class, ()-> projectService.deleteProject(userId, projectId));
     }
     @Test
-    public void aWhoIsNotOwnerCannotDeletedProject(){
+    public void aUserWhoIsNotOwnerCannotDeletedProject(){
         Long userId = 2L;
         Long projectId = 3L;
         assertThrows(ProjectAndUserNotMatchException.class, ()-> projectService.deleteProject(userId, projectId));
