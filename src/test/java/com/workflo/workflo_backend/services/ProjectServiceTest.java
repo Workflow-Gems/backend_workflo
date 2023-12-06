@@ -1,9 +1,7 @@
 package com.workflo.workflo_backend.services;
 
 
-import com.workflo.workflo_backend.exceptions.CloudUploadException;
-import com.workflo.workflo_backend.exceptions.UserNotFoundException;
-import com.workflo.workflo_backend.exceptions.UserNotVerifiedException;
+import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.project.dtos.request.CreateProject;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
@@ -24,7 +22,7 @@ public class ProjectServiceTest {
     @Autowired
     private ProjectService projectService;
     @Test
-    public void createProjectTest() throws CloudUploadException, UserNotFoundException, UserNotVerifiedException {
+    public void createProjectTest() throws WorkFloException {
         CreateProject createProject = new CreateProject();
         createProject.setUserCreatorId(1L);
         createProject.setName("ProjectName");
@@ -51,7 +49,7 @@ public class ProjectServiceTest {
         assertThrows(UserNotFoundException.class, ()-> projectService.createProject(createProject));
     }
     @Test
-    public void userCanCreateMultipleProjects() throws UserNotFoundException, CloudUploadException, UserNotVerifiedException {
+    public void userCanCreateMultipleProjects() throws WorkFloException {
         CreateProject createProject = new CreateProject();
         createProject.setUserCreatorId(2L);
         createProject.setName("111AnotherProject121");
@@ -66,7 +64,7 @@ public class ProjectServiceTest {
 
     }
     @Test
-    public void userCanCreateMultipleProjectsA() throws UserNotFoundException, CloudUploadException, UserNotVerifiedException {
+    public void userCanCreateMultipleProjectsA() throws WorkFloException {
         CreateProject createProject = new CreateProject();
         createProject.setUserCreatorId(2L);
         createProject.setName("lllll");
@@ -79,7 +77,7 @@ public class ProjectServiceTest {
         assertThat(response.getId()).isEqualTo(4);
     }
     @Test
-    public void userCanCreateMultipleProjectsBA() throws UserNotFoundException, CloudUploadException, UserNotVerifiedException {
+    public void userCanCreateMultipleProjectsBA() throws WorkFloException {
         CreateProject createProject = new CreateProject();
         createProject.setUserCreatorId(1L);
         createProject.setName("name()");
@@ -103,5 +101,24 @@ public class ProjectServiceTest {
         createProject.setNeededSkills(List.of("Skill", "scaling", "..."));
 
         assertThrows(UserNotVerifiedException.class, ()-> projectService.createProject(createProject));
+    }
+    @Test
+    public void ownerOfAProjectAProject() throws WorkFloException {
+        Long userId = 1L;
+        Long projectId = 2L;
+        String response = projectService.deleteProject(userId, projectId);
+        assertThat(response).isNotNull();
+    }
+    @Test
+    public void ownerCannotDeleteProjectThatDoesNotExist(){
+        Long userId = 1L;
+        Long projectId = 1L;
+        assertThrows(ProjectNotExistException.class, ()-> projectService.deleteProject(userId, projectId));
+    }
+    @Test
+    public void aWhoIsNotOwnerCannotDeletedProject(){
+        Long userId = 2L;
+        Long projectId = 3L;
+        assertThrows(ProjectAndUserNotMatchException.class, ()-> projectService.deleteProject(userId, projectId));
     }
 }

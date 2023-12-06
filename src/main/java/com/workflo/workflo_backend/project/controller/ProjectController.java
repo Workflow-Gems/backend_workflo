@@ -1,15 +1,12 @@
 package com.workflo.workflo_backend.project.controller;
 
 
-import com.workflo.workflo_backend.exceptions.CloudUploadException;
-import com.workflo.workflo_backend.exceptions.UserNotFoundException;
-import com.workflo.workflo_backend.exceptions.UserNotVerifiedException;
+import com.workflo.workflo_backend.exceptions.WorkFloException;
 import com.workflo.workflo_backend.project.dtos.request.CreateProject;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import com.workflo.workflo_backend.project.service.ProjectService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,9 +31,7 @@ public class ProjectController {
                                                          @RequestParam(value = "description", required = false) String description,
                                                          @RequestParam(value = "category") ProjectCategory category,
                                                          @RequestParam(value = "skills", required = false) List<String> skills)
-                                                                               throws UserNotFoundException,
-                                                                                      UserNotVerifiedException,
-                                                                                      CloudUploadException {
+                                                                                                            throws WorkFloException {
         CreateProject project = projectService.createProjectDTO(image, id, projectName, summary, description, category, skills);
         return ResponseEntity.status(201).body(projectService.createProject(project));
     }
@@ -47,11 +42,8 @@ public class ProjectController {
                                                          @RequestParam(value = "description", required = false) String description,
                                                          @RequestParam(value = "category") ProjectCategory category,
                                                          @RequestParam(value = "skills", required = false) List<String> skills)
-                                                                               throws UserNotFoundException,
-                                                                                      UserNotVerifiedException,
-                                                                                      CloudUploadException {
+                                                                                                            throws WorkFloException {
         CreateProject project = projectService.createProjectDTO(id, projectName, summary, description, category, skills);
         return ResponseEntity.status(201).body(projectService.createProject(project));
     }
-
 }
