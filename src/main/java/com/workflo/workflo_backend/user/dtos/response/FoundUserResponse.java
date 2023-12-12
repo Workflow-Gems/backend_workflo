@@ -13,6 +13,4 @@ public class FoundUserResponse {
     private String lastName;
     private String email;
     private AccountResponse account;
-    private long createdProjects;
-    private long joinedProjects;
 }

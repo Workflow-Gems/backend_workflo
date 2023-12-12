@@ -5,6 +5,10 @@ import com.workflo.workflo_backend.appConfig.dtos.request.To;
 import com.workflo.workflo_backend.appConfig.services.CloudService;
 import com.workflo.workflo_backend.appConfig.services.MailService;
 import com.workflo.workflo_backend.exceptions.*;
+import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
+import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
+import com.workflo.workflo_backend.project.entities.Project;
+import com.workflo.workflo_backend.project.service.ProjectService;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
@@ -19,10 +23,15 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -148,10 +157,7 @@ public class WorkFloUserService implements UserService {
     @Override
     public FoundUserResponse findProjectedUserById(Long id) throws UserNotFoundException {
        User user = getUserWithId(id);
-       FoundUserResponse response = modelMapper.map(user, FoundUserResponse.class);
-       response.setCreatedProjects(user.getCreatedProjects().size());
-       response.setJoinedProjects(user.getJoinedProjects().size());
-       return response;
+        return modelMapper.map(user, FoundUserResponse.class);
     }
     public User getUserWithId(Long id) throws UserNotFoundException {
         return userRepository.findById(id)
@@ -172,16 +178,30 @@ public class WorkFloUserService implements UserService {
         response.setMessage("user profile updated successfully...");
         return response;
     }
-
     @Override
     public String uploadProfilePicture(long id, MultipartFile multipart) throws UserNotFoundException, CloudUploadException {
         User user = getUserWithId(id);
         String url = cloudService.upload(multipart);
         user.getAccount().getProfile().setImage(url);
         userRepository.save(user);
-        log.info("url :: {}", url);
         return url;
     }
+
+    @Override
+    @Transactional
+    public List<ProjectResponse> viewJoinedProjectsByUser(long id) throws UserNotFoundException, ProjectNotExistException {
+        User user = getUserWithId(id);
+        if (!user.getJoinedProjects().isEmpty()){
+            List<ProjectResponse> responses = new ArrayList<>();
+            for (Project project : user.getJoinedProjects()){
+                responses.add(modelMapper.map(project, ProjectResponse.class));
+            }
+            return responses;
+        }
+        throw new ProjectNotExistException("you have no joined projects...");
+    }
+
+
     private static ExtractedUpdate getExtractedUpdate(User user) {
         Address address = user.getAccount().getAddress();
         Profile profile = user.getAccount().getProfile();
@@ -192,10 +212,6 @@ public class WorkFloUserService implements UserService {
     }
     public FoundUserResponse getUserById(Long id) throws UserNotFoundException {
         User user = getUserWithId(id);
-        FoundUserResponse response = modelMapper.map(user, FoundUserResponse.class);
-        response.setCreatedProjects(user.getCreatedProjects().size());
-        response.setJoinedProjects(user.getJoinedProjects().size());
-        return response;
+        return modelMapper.map(user, FoundUserResponse.class);
     }
-
 }

@@ -14,6 +14,5 @@ public class ProjectResponse {
     private Long id;
     private String name;
     private String summary;
-    private String description;
     private ProjectCategory category;
 }

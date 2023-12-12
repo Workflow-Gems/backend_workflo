@@ -1,8 +1,10 @@
 package com.workflo.workflo_backend.project.controller;
 
 
+import com.workflo.workflo_backend.exceptions.ProjectNotExistException;
 import com.workflo.workflo_backend.exceptions.WorkFloException;
 import com.workflo.workflo_backend.project.dtos.request.CreateProjectRequest;
+import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import com.workflo.workflo_backend.project.service.ProjectService;
@@ -42,5 +44,14 @@ public class ProjectController {
     @GetMapping("/{page}/{size}")
     public ResponseEntity<Page<ProjectResponse>> allProjects(@PathVariable int page, @PathVariable int size){
         return ResponseEntity.ok().body(projectService.getAllProjects(page, size));
+    }
+    @GetMapping
+    public ResponseEntity<ProjectProjection> viewProject(@RequestParam(value = "id", required = true) Long id)
+                                                                                            throws WorkFloException {
+        return ResponseEntity.ok().body(projectService.viewProjectById(id));
+    }
+    @GetMapping("/{id}/getAllProjects")
+    public ResponseEntity<List<ProjectResponse>> viewUserCreatedProject(@PathVariable Long id) throws ProjectNotExistException {
+        return ResponseEntity.ok().body(projectService.viewCreatedProjectsByUser(id));
     }
 }
