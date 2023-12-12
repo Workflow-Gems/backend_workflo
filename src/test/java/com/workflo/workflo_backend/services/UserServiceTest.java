@@ -4,12 +4,14 @@ package com.workflo.workflo_backend.services;
 import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
+import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
 import com.workflo.workflo_backend.user.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -47,10 +49,22 @@ public class UserServiceTest {
         UserRequest request = new UserRequest();
         request.setFirstName("firstName");
         request.setLastName("lastName");
-        request.setEmail("leumasre@gmail.com");
+        request.setEmail("banjo.oladele.samuel@gmail.com");
         request.setPassword("Password12@");
         request.setPhoneNumber("08063587905");
         assertThrows(DuplicatedUserEmailException.class, ()->userService.createUser(request));
+    }
+    @Test
+    public void createProfile() throws CloudUploadException, UserNotFoundException, UserNotVerifiedException {
+        ProfileRequest profile = new ProfileRequest();
+        profile.setAbout("ask about me");
+        profile.setImage(createMultipart());
+        profile.setUserId(1L);
+        profile.setSkills(List.of("my skill set", "another skill"));
+        profile.setPortfolio(Map.of("linkedIn", "linkedIn", "X", "X spaces"));
+        profile.setJobTitle("title is titling");
+        String response = userService.createProfile(profile);
+        assertThat(response).isNotNull();
     }
     @Test
     public void createAddress() throws UserNotFoundException {
@@ -95,5 +109,22 @@ public class UserServiceTest {
         log.info("projection account :: {}", response.getAccount().toString());
         assertThat(response.getFirstName()).isNotNull();
         assertEquals("firstName", response.getFirstName());
+    }
+    @Test
+    public void updateUser() throws UserNotFoundException {
+        UpdateUserRequest request = new UpdateUserRequest();
+        request.setLastName("idowu");
+        request.setPhoneNumber("09061117599");
+        request.setSkills(List.of("java"));
+        request.setPortFolio(Map.of("instagram", "instagram"));
+        request.setCountry("Nigeria");
+        UserResponse response = userService.updateUser(1L, request);
+        assertThat(response).isNotNull();
+    }
+    @Test
+    public void uploadProfilePicture() throws CloudUploadException, UserNotFoundException {
+        String response = userService.uploadProfilePicture(1L,createMultipart());
+        assertThat(response).isNotNull();
+        assertThat(response).contains("https");
     }
 }

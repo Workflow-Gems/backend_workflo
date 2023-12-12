@@ -28,6 +28,5 @@ public class Profile {
     @ElementCollection
     private List<String> skills;
     @ElementCollection
-//    @MapKeyJoinColumn(name = "portfolio_title")
     private Map<String, String> portFolio;
 }

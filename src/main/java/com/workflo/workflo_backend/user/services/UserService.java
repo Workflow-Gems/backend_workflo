@@ -36,7 +36,6 @@ public interface UserService {
                                                String jobTitle,
                                                List<String> skills){
         ProfileRequest request = new ProfileRequest();
-//        request.setImage(image);
         request.setUserId(id);
         request.setAbout(about);
         request.setSkills(skills);
@@ -44,7 +43,11 @@ public interface UserService {
         request.setJobTitle(jobTitle);
         return request;
     }
-
     FoundUserResponse findProjectedUserById(Long id) throws UserNotFoundException;
-    User getUserById(Long id) throws UserNotFoundException;
+    FoundUserResponse getUserById(Long id) throws UserNotFoundException;
+    User getUserWithId(Long id) throws UserNotFoundException;
+
+    UserResponse updateUser(Long id, UpdateUserRequest request) throws UserNotFoundException;
+
+    String uploadProfilePicture(long id, MultipartFile multipart) throws UserNotFoundException, CloudUploadException;
 }

@@ -7,6 +7,7 @@ import com.workflo.workflo_backend.appConfig.services.MailService;
 import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
+import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
@@ -16,8 +17,10 @@ import com.workflo.workflo_backend.user.services.TokenService;
 import com.workflo.workflo_backend.user.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 
 import java.util.List;
@@ -29,6 +32,7 @@ import static com.workflo.workflo_backend.user.models.UserStatus.PENDING;
 
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class WorkFloUserService implements UserService {
 
@@ -49,7 +53,7 @@ public class WorkFloUserService implements UserService {
         return generatedUserResponse(savedUser);
     }
     @Transactional
-    public User createUserAccount(UserRequest request) throws SendMailException {
+    private User createUserAccount(UserRequest request) throws SendMailException {
         Account account = modelMapper.map(request, Account.class);
         User user = modelMapper.map(request, User.class);
         user.setAccount(account);
@@ -101,11 +105,8 @@ public class WorkFloUserService implements UserService {
     }
     @Override
     public String createAddress(AddressRequest request) throws UserNotFoundException {
-        User user = getUserById(request.getUserId());
-        Address address = new Address();
-        address.setCity(request.getCity());
-        address.setCountry(request.getCountry());
-        address.setState(request.getState());
+        User user = getUserWithId(request.getUserId());
+        Address address = modelMapper.map(request, Address.class);
         address.setZipCode(Long.parseLong(request.getZipCode()));
         user.getAccount().setAddress(address);
         userRepository.save(user);
@@ -113,20 +114,22 @@ public class WorkFloUserService implements UserService {
     }
     @Override
     public String createProfile(ProfileRequest request) throws UserNotFoundException, CloudUploadException, UserNotVerifiedException {
-        User user = getUserById(request.getUserId());
+        User user = getUserWithId(request.getUserId());
         if (user.getUserStatus() == ACTIVE) {
-            Profile profile = modelMapper.map(request, Profile.class);
-            if (request.getImage() != null) {
-                String image = cloudService.upload(request.getImage());
-                profile.setImage(image);
-            }
-            user.getAccount().setProfile(profile);
-            user.setEnabled(!user.isEnabled());
-            userRepository.save(user);
-            return "Profile update successfully...";
+            return generateUserProfile(request, user);
         }
         throw new UserNotVerifiedException(String
                 .format("dear %s,kindly check your mail to confirm email before you can continue", user.getFirstName()));
+    }
+    private String generateUserProfile(ProfileRequest request, User user) throws CloudUploadException {
+        Profile profile = modelMapper.map(request, Profile.class);
+        if (request.getImage() != null) {
+            profile.setImage(cloudService.upload(request.getImage()));
+        }
+        user.getAccount().setProfile(profile);
+        user.setEnabled(!user.isEnabled());
+        userRepository.save(user);
+        return "Profile update successfully...";
     }
     @Override
     @Transactional
@@ -144,11 +147,55 @@ public class WorkFloUserService implements UserService {
     }
     @Override
     public FoundUserResponse findProjectedUserById(Long id) throws UserNotFoundException {
-       User user = getUserById(id);
-       return modelMapper.map(user, FoundUserResponse.class);
+       User user = getUserWithId(id);
+       FoundUserResponse response = modelMapper.map(user, FoundUserResponse.class);
+       response.setCreatedProjects(user.getCreatedProjects().size());
+       response.setJoinedProjects(user.getJoinedProjects().size());
+       return response;
     }
-    public User getUserById(Long id) throws UserNotFoundException {
+    public User getUserWithId(Long id) throws UserNotFoundException {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found..."));
     }
+    @Override
+    @Transactional
+    public UserResponse updateUser(Long id, UpdateUserRequest request) throws UserNotFoundException {
+        User user = getUserWithId(id);
+        ExtractedUpdate update = getExtractedUpdate(user);
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(request, update.address());
+        modelMapper.map(request, update.profile());
+        modelMapper.map(request, update.account());
+        modelMapper.map(request, user);
+        User savedUser = userRepository.save(user);
+        UserResponse response = modelMapper.map(savedUser, UserResponse.class);
+        response.setMessage("user profile updated successfully...");
+        return response;
+    }
+
+    @Override
+    public String uploadProfilePicture(long id, MultipartFile multipart) throws UserNotFoundException, CloudUploadException {
+        User user = getUserWithId(id);
+        String url = cloudService.upload(multipart);
+        user.getAccount().getProfile().setImage(url);
+        userRepository.save(user);
+        log.info("url :: {}", url);
+        return url;
+    }
+    private static ExtractedUpdate getExtractedUpdate(User user) {
+        Address address = user.getAccount().getAddress();
+        Profile profile = user.getAccount().getProfile();
+        Account account = user.getAccount();
+        return new ExtractedUpdate(address, profile, account);
+    }
+    private record ExtractedUpdate(Address address, Profile profile, Account account) {
+    }
+    public FoundUserResponse getUserById(Long id) throws UserNotFoundException {
+        User user = getUserWithId(id);
+        FoundUserResponse response = modelMapper.map(user, FoundUserResponse.class);
+        response.setCreatedProjects(user.getCreatedProjects().size());
+        response.setJoinedProjects(user.getJoinedProjects().size());
+        return response;
+    }
+
 }

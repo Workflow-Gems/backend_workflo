@@ -1,30 +1,27 @@
 package com.workflo.workflo_backend.project.service;
 
 import com.workflo.workflo_backend.exceptions.*;
-import com.workflo.workflo_backend.project.dtos.request.CreateProject;
+import com.workflo.workflo_backend.project.dtos.request.CreateProjectRequest;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.Project;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface ProjectService {
-    ProjectResponse createProject(CreateProject createProject) throws UserNotFoundException,
+    ProjectResponse createProject(CreateProjectRequest createProjectRequest) throws UserNotFoundException,
                                                                       CloudUploadException,
                                                                       UserNotVerifiedException, WorkFloException;
-
-    default CreateProject createProjectDTO(MultipartFile image,
-                                           Long id,
-                                           String projectName,
-                                           String summary,
-                                           String description,
-                                           ProjectCategory category,
-                                           List<String> skills) {
-
-
-
-        CreateProject project = new CreateProject();
+    default CreateProjectRequest createProjectDTO(MultipartFile image,
+                                                  Long id,
+                                                  String projectName,
+                                                  String summary,
+                                                  String description,
+                                                  ProjectCategory category,
+                                                  List<String> skills) {
+        CreateProjectRequest project = new CreateProjectRequest();
         project.setCategory(category);
         project.setDescription(description);
         project.setName(projectName);
@@ -34,24 +31,10 @@ public interface ProjectService {
         project.setUserCreatorId(id);
         return project;
     }
-    default CreateProject createProjectDTO(Long id,
-                                           String projectName,
-                                           String summary,
-                                           String description,
-                                           ProjectCategory category,
-                                           List<String> skills) {
-
-        CreateProject project = new CreateProject();
-        project.setCategory(category);
-        project.setDescription(description);
-        project.setName(projectName);
-        project.setSummary(summary);
-        project.setNeededSkills(skills);
-        project.setUserCreatorId(id);
-        return project;
-    }
 
     String deleteProject(Long userId, Long projectId) throws UserNotFoundException, ProjectNotExistException, ProjectAndUserNotMatchException, WorkFloException;
 
     Project findProjectById(Long projectId) throws WorkFloException;
+
+    Page<ProjectResponse> getAllProjects(int page, int size);
 }

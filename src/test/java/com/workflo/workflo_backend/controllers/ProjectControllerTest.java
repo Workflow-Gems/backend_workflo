@@ -2,7 +2,6 @@ package com.workflo.workflo_backend.controllers;
 
 
 import com.workflo.workflo_backend.exceptions.CloudUploadException;
-import com.workflo.workflo_backend.project.dtos.request.CreateProject;
 import com.workflo.workflo_backend.project.service.ProjectService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
 import static com.workflo.workflo_backend.project.entities.ProjectCategory.SCIENCE;
 import static com.workflo.workflo_backend.services.app.CloudServiceTest.createMultipart;
 import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,9 +57,13 @@ public class ProjectControllerTest {
     }
     @Test
     public void deleteProject() throws Exception {
-        mockMvc.perform(delete("/api/v1/user/project/1/3"))
+        mockMvc.perform(delete("/api/v1/user/project/1/1"))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
     }
-
+    @Test
+    public void getAllProjects() throws Exception {
+        mockMvc.perform(get("/api/v1/user/project/1/10"))
+                .andExpect(status().is2xxSuccessful()).andDo(print());
+    }
 }

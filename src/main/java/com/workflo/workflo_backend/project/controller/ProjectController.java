@@ -2,11 +2,12 @@ package com.workflo.workflo_backend.project.controller;
 
 
 import com.workflo.workflo_backend.exceptions.WorkFloException;
-import com.workflo.workflo_backend.project.dtos.request.CreateProject;
+import com.workflo.workflo_backend.project.dtos.request.CreateProjectRequest;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import com.workflo.workflo_backend.project.service.ProjectService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,23 +30,17 @@ public class ProjectController {
                                                          @RequestParam(value = "category") ProjectCategory category,
                                                          @RequestParam(value = "skills", required = false) List<String> skills)
                                                                                                             throws WorkFloException {
-        CreateProject project = projectService.createProjectDTO(image, id, projectName, summary, description, category, skills);
-        return ResponseEntity.status(201).body(projectService.createProject(project));
-    }
-    @PostMapping
-    public ResponseEntity<ProjectResponse> createProject(@RequestParam(value = "userId") Long id,
-                                                         @RequestParam(value = "project_name") String projectName,
-                                                         @RequestParam(value = "summary") String summary,
-                                                         @RequestParam(value = "description", required = false) String description,
-                                                         @RequestParam(value = "category") ProjectCategory category,
-                                                         @RequestParam(value = "skills", required = false) List<String> skills)
-                                                                                                            throws WorkFloException {
-        CreateProject project = projectService.createProjectDTO(id, projectName, summary, description, category, skills);
+        CreateProjectRequest project = projectService.createProjectDTO(image, id, projectName, summary, description, category, skills);
         return ResponseEntity.status(201).body(projectService.createProject(project));
     }
     @DeleteMapping("/{userId}/{projectId}")
     public ResponseEntity<String> deleteProject(@PathVariable("userId") Long userId,
                                                 @PathVariable("projectId") Long projectId) throws WorkFloException {
         return ResponseEntity.ok().body(projectService.deleteProject(userId, projectId));
+    }
+
+    @GetMapping("/{page}/{size}")
+    public ResponseEntity<Page<ProjectResponse>> allProjects(@PathVariable int page, @PathVariable int size){
+        return ResponseEntity.ok().body(projectService.getAllProjects(page, size));
     }
 }

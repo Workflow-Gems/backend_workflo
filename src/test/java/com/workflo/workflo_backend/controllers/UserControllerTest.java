@@ -3,7 +3,9 @@ package com.workflo.workflo_backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workflo.workflo_backend.exceptions.CloudUploadException;
+import com.workflo.workflo_backend.exceptions.WorkFloException;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
+import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -16,13 +18,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import static com.workflo.workflo_backend.services.app.CloudServiceTest.createMultipart;
-import static org.springframework.http.MediaType.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -132,6 +135,29 @@ public class UserControllerTest {
     @Test
     public void getUserByIdTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/1"))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+    }
+    @Test
+    public void updateUserProfile() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        UpdateUserRequest request = new UpdateUserRequest();
+        request.setFirstName("naming");
+        request.setAbout("always about me");
+        request.setCity("County");
+
+        mockMvc.perform(patch("/api/v1/user/1/updateProfile")
+                    .contentType(APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(request)))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+    }
+    @Test
+    public void uploadImage() throws WorkFloException, Exception {
+        mockMvc.perform(multipart("/api/v1/user/1/profilePicture")
+                    .part(new MockPart("id", new byte[]{49}))
+                    .file(new MockMultipartFile("image", createMultipart().getInputStream()))
+                    .contentType(MULTIPART_FORM_DATA_VALUE))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
     }
