@@ -36,7 +36,7 @@ public class WorkFloJoinRequestService implements JoinRequestService {
 
     @Override
     public JoinProjectResponse bidForProject(JoinProjectRequest request) throws WorkFloException {
-        User user = userService.getUserById(request.getUserId());
+        User user = userService.getUserWithId(request.getUserId());
         if (user.isEnabled()) {
             Project project = projectService.findProjectById(request.getProjectId());
             if (!project.getCreatorId().equals(user)) {

@@ -10,8 +10,6 @@ import lombok.*;
 @Getter@Setter
 public class AddressRequest {
     @NotNull(message = "id field cannot be empty...")
-//    @NotEmpty(message = "id field cannot be empty...")
-//    @NotBlank(message = "id field cannot be blank...")
     private Long userId;
     @NotNull(message = "city field cannot be empty...")
     @NotEmpty(message = "city field cannot be empty...")

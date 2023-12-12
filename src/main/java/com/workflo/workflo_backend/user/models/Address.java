@@ -18,7 +18,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Address {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private Long identifier;
 //    @Column(name = "city", length = 100)
     private String city;
 //    @Column(length = 100)

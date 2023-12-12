@@ -4,6 +4,7 @@ package com.workflo.workflo_backend.user.controller;
 import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
+import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
@@ -24,8 +25,6 @@ import static org.springframework.http.MediaType.*;
 @RequestMapping("/api/v1")
 @AllArgsConstructor
 public class UserController {
-
-
     private final UserService userService;
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest request)
@@ -73,5 +72,17 @@ public class UserController {
     @GetMapping("/user/{id}")
     public ResponseEntity<FoundUserResponse> getUserById(@PathVariable Long id) throws UserNotFoundException {
         return ResponseEntity.ok().body(userService.findProjectedUserById(id));
+    }
+    @PatchMapping("/user/{id}/updateProfile")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
+                                                   @RequestBody UpdateUserRequest request)
+                                                                throws UserNotFoundException {
+        return ResponseEntity.ok().body(userService.updateUser(id, request));
+    }
+    @PostMapping("/user/{id}/profilePicture")
+    public ResponseEntity<String> uploadProfilePicture(@PathVariable Long id,
+                                                       @RequestParam MultipartFile image)
+                                                                     throws UserNotFoundException, CloudUploadException {
+        return ResponseEntity.ok().body(userService.uploadProfilePicture(id, image));
     }
 }

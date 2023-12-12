@@ -1,6 +1,5 @@
 package com.workflo.workflo_backend.user.models;
 
-import com.workflo.workflo_backend.join_project.dtos.request.JoinProjectRequest;
 import com.workflo.workflo_backend.join_project.models.JoinProject;
 import com.workflo.workflo_backend.project.entities.Project;
 import jakarta.persistence.*;

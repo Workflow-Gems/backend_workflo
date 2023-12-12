@@ -27,9 +27,8 @@ public class Account {
     @JoinColumn(name = "account_profile",
             referencedColumnName = "id")
     private Profile profile;
-
     @OneToOne(cascade = ALL, fetch = EAGER)
     @JoinColumn(name = "user_address",
-            referencedColumnName = "id")
+            referencedColumnName = "identifier")
     private Address address;
 }

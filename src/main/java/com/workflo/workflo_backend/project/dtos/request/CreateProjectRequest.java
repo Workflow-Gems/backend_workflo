@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter@Setter
-public class CreateProject {
+public class CreateProjectRequest {
     private Long userCreatorId;
     private String name;
     private String summary;
