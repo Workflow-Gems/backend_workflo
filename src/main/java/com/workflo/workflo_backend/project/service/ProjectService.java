@@ -2,6 +2,7 @@ package com.workflo.workflo_backend.project.service;
 
 import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.project.dtos.request.CreateProjectRequest;
+import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.Project;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
@@ -31,10 +32,13 @@ public interface ProjectService {
         project.setUserCreatorId(id);
         return project;
     }
-
     String deleteProject(Long userId, Long projectId) throws UserNotFoundException, ProjectNotExistException, ProjectAndUserNotMatchException, WorkFloException;
 
     Project findProjectById(Long projectId) throws WorkFloException;
 
     Page<ProjectResponse> getAllProjects(int page, int size);
+
+    ProjectProjection viewProjectById(long projectId) throws WorkFloException;
+
+    List<ProjectResponse> viewCreatedProjectsByUser(Long userId) throws ProjectNotExistException;
 }

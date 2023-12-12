@@ -161,4 +161,10 @@ public class UserControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
     }
+    @Test
+    public void userCanGetAllJoinedProjects() throws Exception{
+        mockMvc.perform(get("/api/v1/user/project/1/joinedProjects"))
+                .andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
 }

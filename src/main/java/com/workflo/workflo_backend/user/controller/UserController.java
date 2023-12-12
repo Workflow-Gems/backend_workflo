@@ -2,11 +2,13 @@ package com.workflo.workflo_backend.user.controller;
 
 
 import com.workflo.workflo_backend.exceptions.*;
+import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
+import com.workflo.workflo_backend.user.dtos.response.ProfileResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
 import com.workflo.workflo_backend.user.services.UserService;
 import jakarta.validation.Valid;
@@ -84,5 +86,11 @@ public class UserController {
                                                        @RequestParam MultipartFile image)
                                                                      throws UserNotFoundException, CloudUploadException {
         return ResponseEntity.ok().body(userService.uploadProfilePicture(id, image));
+    }
+    @GetMapping("/user/project/{id}/joinedProjects")
+    public ResponseEntity<List<ProjectResponse>> viewJoinedProjects(@PathVariable Long id)
+                                                                            throws UserNotFoundException,
+                                                                                   ProjectNotExistException {
+        return ResponseEntity.ok().body(userService.viewJoinedProjectsByUser(id));
     }
 }

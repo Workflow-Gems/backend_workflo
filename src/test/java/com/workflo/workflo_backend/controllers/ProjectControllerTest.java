@@ -66,4 +66,17 @@ public class ProjectControllerTest {
         mockMvc.perform(get("/api/v1/user/project/1/10"))
                 .andExpect(status().is2xxSuccessful()).andDo(print());
     }
+    @Test
+    public void viewProjectTest() throws Exception{
+        mockMvc.perform(get("/api/v1/user/project")
+                    .param("id", "1"))
+               .andExpect(status().is2xxSuccessful())
+               .andDo(print());
+    }
+    @Test
+    public void viewAllUserCreatedProjects() throws Exception{
+        mockMvc.perform(get("/api/v1/user/project/1/getAllProjects"))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+    }
 }

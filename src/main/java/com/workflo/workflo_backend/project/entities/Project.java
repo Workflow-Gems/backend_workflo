@@ -39,7 +39,6 @@ public class Project {
     private LocalDateTime creationMark;
     @Enumerated(STRING)
     private ProjectStatus projectStatus;
-
     @OneToMany(mappedBy = "project")
     private List<JoinProject> projectRequest;
     @PrePersist

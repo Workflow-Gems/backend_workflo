@@ -2,6 +2,7 @@ package com.workflo.workflo_backend.services;
 
 
 import com.workflo.workflo_backend.exceptions.*;
+import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
@@ -11,7 +12,6 @@ import com.workflo.workflo_backend.user.dtos.response.UserResponse;
 import com.workflo.workflo_backend.user.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -127,4 +127,16 @@ public class UserServiceTest {
         assertThat(response).isNotNull();
         assertThat(response).contains("https");
     }
+
+    @Test
+    public void viewJoinedProjects() {
+        assertThrows(ProjectNotExistException.class, ()->userService.viewJoinedProjectsByUser(1L));
+    }
+    @Test
+    public void viewJoinedProjectsA() throws UserNotFoundException, ProjectNotExistException {
+        List<ProjectResponse> responses = userService.viewJoinedProjectsByUser(1L);
+        assertThat(responses).isNotNull();
+        assertThat(responses.size()).isEqualTo(0);
+    }
+
 }

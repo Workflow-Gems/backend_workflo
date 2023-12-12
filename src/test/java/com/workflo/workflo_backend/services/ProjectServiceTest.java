@@ -3,9 +3,11 @@ package com.workflo.workflo_backend.services;
 
 import com.workflo.workflo_backend.exceptions.*;
 import com.workflo.workflo_backend.project.dtos.request.CreateProjectRequest;
+import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import com.workflo.workflo_backend.project.service.ProjectService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@Slf4j
 public class ProjectServiceTest {
     @Autowired
     private ProjectService projectService;
@@ -127,5 +130,21 @@ public class ProjectServiceTest {
         Page<ProjectResponse> projects = projectService.getAllProjects(1, 3);
         assertThat(projects).isNotNull();
         assertThat(projects.getTotalPages()).isEqualTo(1);
+    }
+    @Test
+    public void viewProject() throws WorkFloException {
+        ProjectProjection project = projectService.viewProjectById(1L);
+        assertThat(project).isNotNull();
+        assertThat(project.getCategory()).isEqualTo(AGRICULTURE);
+    }
+    @Test
+    public void viewProjectsCreatedBySelfTest() throws ProjectNotExistException {
+        List<ProjectResponse> responses = projectService.viewCreatedProjectsByUser(1L);
+        assertThat(responses).isNotNull();
+        assertThat(responses.size()).isEqualTo(1);
+    }
+    @Test
+    public void projectOwnerCanCreateVacancy(){
+
     }
 }
