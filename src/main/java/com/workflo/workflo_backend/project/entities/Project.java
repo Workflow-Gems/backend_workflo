@@ -1,8 +1,8 @@
 package com.workflo.workflo_backend.project.entities;
 
 
-import com.workflo.workflo_backend.join_project.models.JoinProject;
 import com.workflo.workflo_backend.user.models.User;
+import com.workflo.workflo_backend.vacancy.entity.Vacancy;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,9 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @NoArgsConstructor
@@ -39,8 +41,8 @@ public class Project {
     private LocalDateTime creationMark;
     @Enumerated(STRING)
     private ProjectStatus projectStatus;
-    @OneToMany(mappedBy = "project")
-    private List<JoinProject> projectRequest;
+    @OneToOne(fetch = EAGER, cascade = ALL, mappedBy = "project")
+    private Vacancy vacancy;
     @PrePersist
     private void setCreationMark(){
         this.creationMark = LocalDateTime.now();

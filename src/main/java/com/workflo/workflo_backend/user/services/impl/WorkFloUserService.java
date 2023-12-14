@@ -5,17 +5,18 @@ import com.workflo.workflo_backend.appConfig.dtos.request.To;
 import com.workflo.workflo_backend.appConfig.services.CloudService;
 import com.workflo.workflo_backend.appConfig.services.MailService;
 import com.workflo.workflo_backend.exceptions.*;
-import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.Project;
-import com.workflo.workflo_backend.project.service.ProjectService;
 import com.workflo.workflo_backend.user.dtos.request.AddressRequest;
 import com.workflo.workflo_backend.user.dtos.request.ProfileRequest;
 import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
-import com.workflo.workflo_backend.user.models.*;
+import com.workflo.workflo_backend.user.models.Account;
+import com.workflo.workflo_backend.user.models.Address;
+import com.workflo.workflo_backend.user.models.Profile;
+import com.workflo.workflo_backend.user.models.User;
 import com.workflo.workflo_backend.user.repository.UserRepository;
 import com.workflo.workflo_backend.user.services.TokenService;
 import com.workflo.workflo_backend.user.services.UserService;
@@ -23,10 +24,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
@@ -130,6 +127,7 @@ public class WorkFloUserService implements UserService {
         throw new UserNotVerifiedException(String
                 .format("dear %s,kindly check your mail to confirm email before you can continue", user.getFirstName()));
     }
+    @Transactional
     private String generateUserProfile(ProfileRequest request, User user) throws CloudUploadException {
         Profile profile = modelMapper.map(request, Profile.class);
         if (request.getImage() != null) {
@@ -165,18 +163,21 @@ public class WorkFloUserService implements UserService {
     }
     @Override
     @Transactional
-    public UserResponse updateUser(Long id, UpdateUserRequest request) throws UserNotFoundException {
+    public UserResponse updateUser(Long id, UpdateUserRequest request) throws UserNotFoundException, UpdateNotAllowedException {
         User user = getUserWithId(id);
-        ExtractedUpdate update = getExtractedUpdate(user);
-        modelMapper.getConfiguration().setSkipNullEnabled(true);
-        modelMapper.map(request, update.address());
-        modelMapper.map(request, update.profile());
-        modelMapper.map(request, update.account());
-        modelMapper.map(request, user);
-        User savedUser = userRepository.save(user);
-        UserResponse response = modelMapper.map(savedUser, UserResponse.class);
-        response.setMessage("user profile updated successfully...");
-        return response;
+        if (user.getAccount().getProfile() != null && user.getAccount().getAddress() != null) {
+            ExtractedUpdate update = getExtractedUpdate(user);
+            modelMapper.getConfiguration().setSkipNullEnabled(true);
+            modelMapper.map(request, update.address());
+            modelMapper.map(request, update.profile());
+            modelMapper.map(request, update.account());
+            modelMapper.map(request, user);
+            User savedUser = userRepository.save(user);
+            UserResponse response = modelMapper.map(savedUser, UserResponse.class);
+            response.setMessage("user profile updated successfully...");
+            return response;
+        }
+        throw new UpdateNotAllowedException("kindly complete your profile and contact information to complete this action");
     }
     @Override
     public String uploadProfilePicture(long id, MultipartFile multipart) throws UserNotFoundException, CloudUploadException {

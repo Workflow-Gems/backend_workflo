@@ -42,8 +42,8 @@ public class WorkFloJoinRequestService implements JoinRequestService {
             if (!project.getCreatorId().equals(user)) {
                 JoinProject joinProject = createJoinRequest(request, project, user);
                 JoinProject savedRequest = repository.save(joinProject);
-                setContext(project,request,user);
-                return generateResponse(savedRequest);
+//                setContext(project,request,user);
+                return generateJoinRequestResponse(savedRequest);
             }
             throw new ProjectOwnerException(
                     String.format("dear %s, you cannot request to join your own project", user.getFirstName()));
@@ -53,10 +53,11 @@ public class WorkFloJoinRequestService implements JoinRequestService {
     private JoinProject createJoinRequest(JoinProjectRequest request, Project project, User user){
         return JoinProject.builder()
                 .message(request.getMessage())
-                .status(PENDING).project(project)
-                .user(user).build();
+                .status(PENDING).build();
+//                .project(project)
+//                .user(user).build();
     }
-    private JoinProjectResponse generateResponse(JoinProject request){
+    private JoinProjectResponse generateJoinRequestResponse(JoinProject request){
         return JoinProjectResponse.builder()
                 .id(request.getId()).status(request.getStatus())
                 .message("Kindly wait for the project owner to review")

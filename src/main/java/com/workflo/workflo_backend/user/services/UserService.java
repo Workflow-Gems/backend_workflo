@@ -50,7 +50,7 @@ public interface UserService {
     FoundUserResponse getUserById(Long id) throws UserNotFoundException;
     User getUserWithId(Long id) throws UserNotFoundException;
 
-    UserResponse updateUser(Long id, UpdateUserRequest request) throws UserNotFoundException;
+    UserResponse updateUser(Long id, UpdateUserRequest request) throws UserNotFoundException, UpdateNotAllowedException;
 
     String uploadProfilePicture(long id, MultipartFile multipart) throws UserNotFoundException, CloudUploadException;
 
