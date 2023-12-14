@@ -78,7 +78,7 @@ public class UserController {
     @PatchMapping("/user/{id}/updateProfile")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
                                                    @RequestBody UpdateUserRequest request)
-                                                                throws UserNotFoundException {
+                                                                throws UserNotFoundException, UpdateNotAllowedException {
         return ResponseEntity.ok().body(userService.updateUser(id, request));
     }
     @PostMapping("/user/{id}/profilePicture")

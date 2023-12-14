@@ -6,6 +6,8 @@ import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.Project;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
+import com.workflo.workflo_backend.vacancy.dtos.request.VacancyRequest;
+import com.workflo.workflo_backend.vacancy.dtos.response.VacancyResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 

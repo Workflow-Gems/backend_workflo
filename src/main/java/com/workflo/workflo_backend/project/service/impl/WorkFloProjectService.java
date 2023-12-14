@@ -8,6 +8,9 @@ import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.Project;
 import com.workflo.workflo_backend.project.repository.ProjectRepository;
 import com.workflo.workflo_backend.project.service.ProjectService;
+import com.workflo.workflo_backend.vacancy.dtos.request.VacancyRequest;
+import com.workflo.workflo_backend.vacancy.dtos.response.VacancyResponse;
+import com.workflo.workflo_backend.vacancy.entity.Vacancy;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.models.User;
 import com.workflo.workflo_backend.user.services.UserService;
@@ -24,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.workflo.workflo_backend.project.entities.ProjectStatus.ONGOING;
+import static com.workflo.workflo_backend.vacancy.entity.VacancyStatus.CLOSED;
+import static com.workflo.workflo_backend.vacancy.entity.VacancyStatus.OPEN;
 import static com.workflo.workflo_backend.user.models.UserStatus.ACTIVE;
 
 
@@ -41,7 +46,7 @@ public class WorkFloProjectService implements ProjectService {
         if (user.isEnabled() && user.getUserStatus() == ACTIVE) {
             Project project = generateProject(createProjectRequest, user);
             ProjectResponse response = mapper.map(project, ProjectResponse.class);
-            response.setId(project.getIdentifier());
+            response.setIdentifier(project.getIdentifier());
             return response;
         }
         throw new UserNotVerifiedException(String
@@ -92,8 +97,6 @@ public class WorkFloProjectService implements ProjectService {
         }
         throw new ProjectNotExistException("You have no created projects...");
     }
-
-
     private Project generateProject(CreateProjectRequest createProjectRequest, User user) throws CloudUploadException {
         Project project = mapper.map(createProjectRequest, Project.class);
         if (createProjectRequest.getImage() != null) project.setImage(cloudService.upload(createProjectRequest.getImage()));

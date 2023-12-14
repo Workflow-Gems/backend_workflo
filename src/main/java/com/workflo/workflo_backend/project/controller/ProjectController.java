@@ -8,6 +8,8 @@ import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import com.workflo.workflo_backend.project.service.ProjectService;
+import com.workflo.workflo_backend.vacancy.dtos.request.VacancyRequest;
+import com.workflo.workflo_backend.vacancy.dtos.response.VacancyResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +42,6 @@ public class ProjectController {
                                                 @PathVariable("projectId") Long projectId) throws WorkFloException {
         return ResponseEntity.ok().body(projectService.deleteProject(userId, projectId));
     }
-
     @GetMapping("/{page}/{size}")
     public ResponseEntity<Page<ProjectResponse>> allProjects(@PathVariable int page, @PathVariable int size){
         return ResponseEntity.ok().body(projectService.getAllProjects(page, size));
@@ -51,7 +52,12 @@ public class ProjectController {
         return ResponseEntity.ok().body(projectService.viewProjectById(id));
     }
     @GetMapping("/{id}/getAllProjects")
-    public ResponseEntity<List<ProjectResponse>> viewUserCreatedProject(@PathVariable Long id) throws ProjectNotExistException {
+    public ResponseEntity<List<ProjectResponse>> viewUserCreatedProject(@PathVariable Long id)
+                                                                                      throws ProjectNotExistException {
         return ResponseEntity.ok().body(projectService.viewCreatedProjectsByUser(id));
     }
+//    @PostMapping("/vacancy")
+//    public ResponseEntity<VacancyResponse> createVacancy(@RequestBody VacancyRequest request) throws WorkFloException {
+//        return ResponseEntity.ok().body(projectService.createVacancy(request));
+//    }
 }

@@ -1,8 +1,10 @@
 package com.workflo.workflo_backend.controllers;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workflo.workflo_backend.exceptions.CloudUploadException;
 import com.workflo.workflo_backend.project.service.ProjectService;
+import com.workflo.workflo_backend.vacancy.dtos.request.VacancyRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -78,5 +80,19 @@ public class ProjectControllerTest {
         mockMvc.perform(get("/api/v1/user/project/1/getAllProjects"))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
+    }
+    @Test
+    public void createVacancyTest() throws Exception{
+        ObjectMapper mapper = new ObjectMapper();
+        VacancyRequest request = new VacancyRequest();
+        request.setProjectIdentifier(3L);
+        request.setUserIdentifier(2L);
+        request.setNeededSkills(List.of("frontend", "backend"));
+        request.setText("We are open for collaboration");
+        mockMvc.perform(post("/api/v1/user/project/vacancy")
+                    .content(mapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON))
+               .andExpect(status().is2xxSuccessful())
+               .andDo(print());
     }
 }

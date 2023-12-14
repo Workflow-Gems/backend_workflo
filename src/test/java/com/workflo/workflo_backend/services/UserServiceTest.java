@@ -111,7 +111,7 @@ public class UserServiceTest {
         assertEquals("firstName", response.getFirstName());
     }
     @Test
-    public void updateUser() throws UserNotFoundException {
+    public void updateUser() throws UserNotFoundException, UpdateNotAllowedException {
         UpdateUserRequest request = new UpdateUserRequest();
         request.setLastName("idowu");
         request.setPhoneNumber("09061117599");

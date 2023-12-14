@@ -28,8 +28,8 @@ public class JoinProjectRequestTest {
     @Test
     public void anotherUserCanRequestToJoinAProject() throws WorkFloException {
         JoinProjectRequest request = new JoinProjectRequest();
-        request.setUserId(1L);
-        request.setProjectId(4L);
+        request.setUserId(2L);
+        request.setProjectId(1L);
         request.setMessage("Kindly, add me... i am interested in building.");
         JoinProjectResponse response = requestService.bidForProject(request);
         assertThat(response).isNotNull();

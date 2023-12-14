@@ -7,6 +7,8 @@ import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import com.workflo.workflo_backend.project.service.ProjectService;
+import com.workflo.workflo_backend.vacancy.dtos.request.VacancyRequest;
+import com.workflo.workflo_backend.vacancy.dtos.response.VacancyResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,7 @@ public class ProjectServiceTest {
 
         ProjectResponse response = projectService.createProject(createProjectRequest);
         assertThat(response).isNotNull();
-        assertThat(response.getId()).isNotNull();
+        assertThat(response.getIdentifier()).isNotNull();
     }
     @Test
     public void userThatDoesNotExistCannotCreate(){
@@ -64,7 +66,7 @@ public class ProjectServiceTest {
 
         ProjectResponse response = projectService.createProject(createProjectRequest);
         assertThat(response).isNotNull();
-        assertThat(response.getId()).isEqualTo(2);
+        assertThat(response.getIdentifier()).isEqualTo(2);
 
     }
     @Test
@@ -78,7 +80,7 @@ public class ProjectServiceTest {
         createProjectRequest.setNeededSkills(List.of("Skill", "scaling", "..."));
         ProjectResponse response = projectService.createProject(createProjectRequest);
         assertThat(response).isNotNull();
-        assertThat(response.getId()).isEqualTo(4);
+        assertThat(response.getIdentifier()).isEqualTo(4);
     }
     @Test
     public void userCanCreateMultipleProjectsBA() throws WorkFloException {
@@ -92,7 +94,7 @@ public class ProjectServiceTest {
 
         ProjectResponse response = projectService.createProject(createProjectRequest);
         assertThat(response).isNotNull();
-        assertThat(response.getId()).isEqualTo(5);
+        assertThat(response.getIdentifier()).isEqualTo(5);
     }
     @Test
     public void userThatIsNotEnabledCannotCreateProject(){
@@ -142,9 +144,5 @@ public class ProjectServiceTest {
         List<ProjectResponse> responses = projectService.viewCreatedProjectsByUser(1L);
         assertThat(responses).isNotNull();
         assertThat(responses.size()).isEqualTo(1);
-    }
-    @Test
-    public void projectOwnerCanCreateVacancy(){
-
     }
 }

@@ -130,5 +130,38 @@ public class GlobalException {
         );
         return ResponseEntity.badRequest().body(errorMessage);
     }
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(VacancyNotCreatedException.class)
+    public ResponseEntity<ErrorMessage> vacancyError(VacancyNotCreatedException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(UpdateNotAllowedException.class)
+    public ResponseEntity<ErrorMessage> vacancyError(UpdateNotAllowedException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
+@ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(VacancyNotFoundException.class)
+    public ResponseEntity<ErrorMessage> vacancyError(VacancyNotFoundException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
 
 }

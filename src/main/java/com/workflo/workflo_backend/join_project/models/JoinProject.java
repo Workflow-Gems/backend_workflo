@@ -1,9 +1,12 @@
 package com.workflo.workflo_backend.join_project.models;
 
-import com.workflo.workflo_backend.project.entities.Project;
+import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.models.User;
+import com.workflo.workflo_backend.vacancy.entity.Vacancy;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -19,7 +22,7 @@ public class JoinProject {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @ManyToOne
-    private Project project;
+    private Vacancy vacancy;
     @ManyToOne
     private User user;
     private String message;

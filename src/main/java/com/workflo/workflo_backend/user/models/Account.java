@@ -25,7 +25,7 @@ public class Account {
     private String phoneNumber;
     @OneToOne(cascade = ALL)
     @JoinColumn(name = "account_profile",
-            referencedColumnName = "id")
+            referencedColumnName = "identifier")
     private Profile profile;
     @OneToOne(cascade = ALL, fetch = EAGER)
     @JoinColumn(name = "user_address",

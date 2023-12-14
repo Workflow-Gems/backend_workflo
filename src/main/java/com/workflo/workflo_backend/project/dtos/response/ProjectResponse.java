@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectResponse {
-    private Long id;
+    private Long identifier;
     private String name;
     private String summary;
     private ProjectCategory category;
