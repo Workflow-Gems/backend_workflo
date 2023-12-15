@@ -95,4 +95,9 @@ public class ProjectControllerTest {
                .andExpect(status().is2xxSuccessful())
                .andDo(print());
     }
+    @Test
+    public void ownerCanRemoveMemberFromTheProject() throws Exception{
+         mockMvc.perform(patch("/api/v1/user/project/1/1/3"))
+                .andExpect(status().is2xxSuccessful()).andDo(print());
+    }
 }

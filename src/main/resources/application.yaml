@@ -1,10 +1,21 @@
 #db configuration
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: OnColosOnColos365
+#    url: jdbc:mysql://localhost:3306/workflo_db
+#  jpa:
+##    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#    generate-ddl: true
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: OnColosOnColos365
-    url: jdbc:mysql://localhost:3306/workflo_db
+    password: FFB4cH22-5d-D-fF5haG-DG53bGBGDA5
+    url: jdbc:mysql:roundhouse.proxy.rlwy.net
   jpa:
 #    show-sql: true
     hibernate:
