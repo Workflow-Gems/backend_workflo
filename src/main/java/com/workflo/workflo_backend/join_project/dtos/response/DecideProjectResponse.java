@@ -1,18 +1,16 @@
 package com.workflo.workflo_backend.join_project.dtos.response;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.workflo.workflo_backend.join_project.models.JoinProjectStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter@Setter
-@ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class JoinProjectResponse {
-    private Long id;
-    private String message;
+public class DecideProjectResponse {
     private JoinProjectStatus status;
+    private Long projectMembers;
 }

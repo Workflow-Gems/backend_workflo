@@ -1,7 +1,7 @@
 package com.workflo.workflo_backend.join_project.dtos.request;
 
 
-import jakarta.validation.constraints.NotNull;
+import com.workflo.workflo_backend.join_project.models.JoinProjectStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,11 +9,9 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter@Getter
-public class JoinProjectRequest {
-    @NotNull
+@Getter@Setter
+public class DecideProjectRequest {
+    private JoinProjectStatus status;
     private Long userId;
-    @NotNull
-    private Long vacancyId;
-    private String message;
+    private Long requestId;
 }

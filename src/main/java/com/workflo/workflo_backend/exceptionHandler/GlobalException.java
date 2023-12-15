@@ -2,6 +2,7 @@ package com.workflo.workflo_backend.exceptionHandler;
 
 
 import com.workflo.workflo_backend.exceptions.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -155,6 +156,28 @@ public class GlobalException {
 @ResponseStatus(FORBIDDEN)
     @ExceptionHandler(VacancyNotFoundException.class)
     public ResponseEntity<ErrorMessage> vacancyError(VacancyNotFoundException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(BidRequestNotAllowedException.class)
+    public ResponseEntity<ErrorMessage> bidRequestNotAllowed(BidRequestNotAllowedException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DuplicateProjectMemberException.class)
+    public ResponseEntity<ErrorMessage> duplicateProjectMember(DuplicateProjectMemberException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,

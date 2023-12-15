@@ -1,16 +1,19 @@
 package com.workflo.workflo_backend.join_project.controller;
 
 
+import com.workflo.workflo_backend.exceptions.DuplicateProjectMemberException;
+import com.workflo.workflo_backend.exceptions.ProjectOwnerException;
 import com.workflo.workflo_backend.exceptions.WorkFloException;
+import com.workflo.workflo_backend.join_project.dtos.request.DecideProjectRequest;
 import com.workflo.workflo_backend.join_project.dtos.request.JoinProjectRequest;
+import com.workflo.workflo_backend.join_project.dtos.response.DecideProjectResponse;
 import com.workflo.workflo_backend.join_project.dtos.response.JoinProjectResponse;
 import com.workflo.workflo_backend.join_project.services.JoinRequestService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user/project")
@@ -21,5 +24,16 @@ public class JoinProjectController {
     @PostMapping("/bid")
     public ResponseEntity<JoinProjectResponse> bidForProject(@RequestBody JoinProjectRequest request) throws WorkFloException {
         return ResponseEntity.ok().body(requestService.bidForProject(request));
+    }
+
+    @PatchMapping("/bid")
+    public ResponseEntity<DecideProjectResponse> decideBidRequest(@RequestBody DecideProjectRequest request)
+                                                                                throws DuplicateProjectMemberException,
+                                                                                       ProjectOwnerException {
+        return ResponseEntity.ok().body(requestService.decideBidRequest(request));
+    }
+    @GetMapping("bid/{id}")
+    public ResponseEntity<List<JoinProjectResponse>> checkUserRequest(@PathVariable Long id){
+        return ResponseEntity.ok().body(requestService.findUserRequestById(id));
     }
 }

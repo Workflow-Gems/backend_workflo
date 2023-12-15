@@ -43,4 +43,5 @@ public interface ProjectService {
     ProjectProjection viewProjectById(long projectId) throws WorkFloException;
 
     List<ProjectResponse> viewCreatedProjectsByUser(Long userId) throws ProjectNotExistException;
+    Project updateProject(Project project);
 }
