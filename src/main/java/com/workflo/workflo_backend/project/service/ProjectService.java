@@ -44,4 +44,6 @@ public interface ProjectService {
 
     List<ProjectResponse> viewCreatedProjectsByUser(Long userId) throws ProjectNotExistException;
     Project updateProject(Project project);
+
+    String removeProjectMember(Long userId, Long memberId, Long projectId) throws WorkFloException;
 }

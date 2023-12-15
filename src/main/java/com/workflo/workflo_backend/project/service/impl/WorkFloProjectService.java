@@ -103,6 +103,19 @@ public class WorkFloProjectService implements ProjectService {
         return repository.save(project);
     }
 
+    @Override
+    @Transactional
+    public String removeProjectMember(Long userId, Long memberId, Long projectId) throws WorkFloException {
+        Project project = findProjectById(projectId);
+//        userService.
+        if (project.getCreatorId().getId().equals(userId)) {
+            boolean result = project.getMembers().remove(userService.getUserWithId(memberId));
+            repository.save(project);
+            if (result) return "removed successfully...";
+        }
+        throw new ProjectOwnerException("Only project owner allowed to perform this action...");
+    }
+
     private Project generateProject(CreateProjectRequest createProjectRequest, User user) throws CloudUploadException {
         Project project = mapper.map(createProjectRequest, Project.class);
         if (createProjectRequest.getImage() != null) project.setImage(cloudService.upload(createProjectRequest.getImage()));

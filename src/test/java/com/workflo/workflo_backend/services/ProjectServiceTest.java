@@ -7,8 +7,6 @@ import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import com.workflo.workflo_backend.project.service.ProjectService;
-import com.workflo.workflo_backend.vacancy.dtos.request.VacancyRequest;
-import com.workflo.workflo_backend.vacancy.dtos.response.VacancyResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,5 +142,26 @@ public class ProjectServiceTest {
         List<ProjectResponse> responses = projectService.viewCreatedProjectsByUser(1L);
         assertThat(responses).isNotNull();
         assertThat(responses.size()).isEqualTo(1);
+    }
+    @Test
+    public void ownerCanRemoveMemberFromTheProject() throws WorkFloException {
+        Long userId = 1L;
+        Long memberId = 2L;
+        Long projectId = 1L;
+
+        String response = projectService.removeProjectMember(userId, memberId, projectId);
+        assertThat(response).isNotNull();
+    }
+    @Test
+    public void onlyProjectOwnerCanRemoveMember(){
+        Long userId = 3L;
+        Long memberId = 2L;
+        Long projectId = 1L;
+
+        assertThrows(ProjectOwnerException.class, () -> projectService.removeProjectMember(userId, memberId, projectId));
+    }
+    @Test
+    public void searchProjectBy(){
+
     }
 }

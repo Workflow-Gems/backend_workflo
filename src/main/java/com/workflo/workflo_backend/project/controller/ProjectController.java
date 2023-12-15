@@ -60,4 +60,10 @@ public class ProjectController {
 //    public ResponseEntity<VacancyResponse> createVacancy(@RequestBody VacancyRequest request) throws WorkFloException {
 //        return ResponseEntity.ok().body(projectService.createVacancy(request));
 //    }
+    @PatchMapping("/{id}/{pId}/{mId}")
+    public ResponseEntity<String> removeProjectMember(@PathVariable Long id,
+                                                      @PathVariable Long pId,
+                                                      @PathVariable Long mId) throws WorkFloException{
+        return ResponseEntity.ok().body(projectService.removeProjectMember(id, mId, pId));
+    }
 }
