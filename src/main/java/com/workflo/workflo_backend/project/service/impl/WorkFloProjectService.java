@@ -97,6 +97,12 @@ public class WorkFloProjectService implements ProjectService {
         }
         throw new ProjectNotExistException("You have no created projects...");
     }
+
+    @Override
+    public Project updateProject(Project project) {
+        return repository.save(project);
+    }
+
     private Project generateProject(CreateProjectRequest createProjectRequest, User user) throws CloudUploadException {
         Project project = mapper.map(createProjectRequest, Project.class);
         if (createProjectRequest.getImage() != null) project.setImage(cloudService.upload(createProjectRequest.getImage()));

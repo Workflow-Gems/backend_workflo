@@ -4,9 +4,7 @@ import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.models.User;
 import com.workflo.workflo_backend.vacancy.entity.Vacancy;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -17,6 +15,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Setter@Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class JoinProject {
     @Id
     @GeneratedValue(strategy = IDENTITY)
