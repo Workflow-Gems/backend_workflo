@@ -15,7 +15,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: FFB4cH22-5d-D-fF5haG-DG53bGBGDA5
-    url: jdbc:mysql:roundhouse.proxy.rlwy.net
+    url: jdbc:mysql://roundhouse.proxy.rlwy.net:43771/railway
   jpa:
 #    show-sql: true
     hibernate:

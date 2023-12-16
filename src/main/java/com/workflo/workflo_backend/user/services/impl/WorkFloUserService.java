@@ -119,6 +119,7 @@ public class WorkFloUserService implements UserService {
         return "Address saved successfully...";
     }
     @Override
+    @Transactional
     public String createProfile(ProfileRequest request) throws UserNotFoundException, CloudUploadException, UserNotVerifiedException {
         User user = getUserWithId(request.getUserId());
         if (user.getUserStatus() == ACTIVE) {
@@ -127,7 +128,7 @@ public class WorkFloUserService implements UserService {
         throw new UserNotVerifiedException(String
                 .format("dear %s,kindly check your mail to confirm email before you can continue", user.getFirstName()));
     }
-    @Transactional
+//    @Transactional
     private String generateUserProfile(ProfileRequest request, User user) throws CloudUploadException {
         Profile profile = modelMapper.map(request, Profile.class);
         if (request.getImage() != null) {
