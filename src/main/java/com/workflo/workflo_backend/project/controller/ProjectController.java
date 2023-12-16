@@ -47,8 +47,8 @@ public class ProjectController {
         return ResponseEntity.ok().body(projectService.getAllProjects(page, size));
     }
     @GetMapping
-    public ResponseEntity<ProjectProjection> viewProject(@RequestParam(value = "id", required = true) Long id)
-                                                                                            throws WorkFloException {
+    public ResponseEntity<ProjectProjection> viewProject(@RequestParam(value = "id") Long id)
+                                                                        throws WorkFloException {
         return ResponseEntity.ok().body(projectService.viewProjectById(id));
     }
     @GetMapping("/{id}/getAllProjects")

@@ -1,6 +1,7 @@
 package com.workflo.workflo_backend.vacancy.dtos.request;
 
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @Getter@Setter
 public class VacancyRequest {
+    @NotNull
     private Long projectIdentifier;
+    @NotNull
     private Long userIdentifier;
     private List<String> neededSkills;
     private String text;
