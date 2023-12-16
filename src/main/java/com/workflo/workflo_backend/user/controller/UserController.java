@@ -58,19 +58,19 @@ public class UserController {
         String response = userService.createProfile(request);
         return ResponseEntity.ok().body(response);
     }
-    @PostMapping(path = "/user/profile")
-    public ResponseEntity<String> createProfile(@RequestParam("id") Long id,
-                                                @RequestParam Map<String, String> portfolio,
-                                                @RequestParam("about") String about,
-                                                @RequestParam("jobTitle") String jobTitle,
-                                                @RequestParam("skills") List<String> skills)
-                                                                        throws UserNotFoundException,
-                                                                               CloudUploadException,
-                                                                               UserNotVerifiedException {
-        ProfileRequest request = userService.buildProfileRequest(id,portfolio, about, jobTitle, skills);
-        String response = userService.createProfile(request);
-        return ResponseEntity.ok().body(response);
-    }
+//    @PostMapping(path = "/user/profile")
+//    public ResponseEntity<String> createProfile(@RequestParam(value = "id", required = true) Long id,
+//                                                @RequestParam Map<String, String> portfolio,
+//                                                @RequestParam("about") String about,
+//                                                @RequestParam("jobTitle") String jobTitle,
+//                                                @RequestParam("skills") List<String> skills)
+//                                                                        throws UserNotFoundException,
+//                                                                               CloudUploadException,
+//                                                                               UserNotVerifiedException {
+//        ProfileRequest request = userService.buildProfileRequest(id,portfolio, about, jobTitle, skills);
+//        String response = userService.createProfile(request);
+//        return ResponseEntity.ok().body(response);
+//    }
     @GetMapping("/user/{id}")
     public ResponseEntity<FoundUserResponse> getUserById(@PathVariable Long id) throws UserNotFoundException {
         return ResponseEntity.ok().body(userService.findProjectedUserById(id));

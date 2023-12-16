@@ -12,6 +12,7 @@ import com.workflo.workflo_backend.vacancy.dtos.request.VacancyRequest;
 import com.workflo.workflo_backend.vacancy.dtos.response.UpdateVacancyResponse;
 import com.workflo.workflo_backend.vacancy.dtos.response.VacancyResponse;
 import com.workflo.workflo_backend.vacancy.services.VacancyService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class VacancyController {
     private final RequestVacancy requestVacancy;
 
     @PostMapping
-    public ResponseEntity<VacancyResponse> createVacancy(@RequestBody VacancyRequest request) throws WorkFloException {
+    public ResponseEntity<VacancyResponse> createVacancy(@Valid @RequestBody VacancyRequest request) throws WorkFloException {
         return ResponseEntity.status(CREATED).body(vacancyService.createVacancy(request));
     }
     @PatchMapping
@@ -42,7 +43,7 @@ public class VacancyController {
         return ResponseEntity.status(OK).body(vacancyService.updateVacancy(userId, id, request));
     }
     @GetMapping
-    public ResponseEntity<List<JoinProjectProjection>> getVacancyRequest(@RequestBody ViewVacancyRequest request)
+    public ResponseEntity<List<JoinProjectProjection>> getVacancyRequest(@Valid @RequestBody ViewVacancyRequest request)
                                                                                       throws ProjectOwnerException,
                                                                                              VacancyNotFoundException {
         return ResponseEntity.status(201).body(requestVacancy.getVacancyRequests(request));
