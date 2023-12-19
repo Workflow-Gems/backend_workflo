@@ -19,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/user/project")
 @AllArgsConstructor
+@CrossOrigin("*")
 public class JoinProjectController {
 
     private final JoinRequestService requestService;

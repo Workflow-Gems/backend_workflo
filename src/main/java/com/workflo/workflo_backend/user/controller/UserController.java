@@ -26,6 +26,7 @@ import static org.springframework.http.MediaType.*;
 @RestController
 @RequestMapping("/api/v1")
 @AllArgsConstructor
+@CrossOrigin("*")
 public class UserController {
     private final UserService userService;
     @PostMapping("/register")

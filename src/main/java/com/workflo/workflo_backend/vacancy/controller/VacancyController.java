@@ -25,6 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/api/v1/user/project/vacancy")
 @AllArgsConstructor
+@CrossOrigin("*")
 public class VacancyController {
 
     private final VacancyService vacancyService;
