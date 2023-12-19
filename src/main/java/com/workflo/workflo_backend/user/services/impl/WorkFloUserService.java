@@ -70,7 +70,7 @@ public class WorkFloUserService implements UserService {
     }
     private void createMailRequest(User user) throws SendMailException {
         String token = tokenService.generateToken(user);
-        String locator = "http://localhost:8080/api/v1/user/confirm?email=%s&token=%s";
+        String locator = "https://backendworkflo-production.up.railway.app/api/v1/user/confirm?email=%s&token=%s";
         String url = String.format(locator,user.getEmail(), token);
         setContext(user, url);
     }
