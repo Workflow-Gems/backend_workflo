@@ -46,4 +46,8 @@ public interface ProjectService {
     Project updateProject(Project project);
 
     String removeProjectMember(Long userId, Long memberId, Long projectId) throws WorkFloException;
+
+    List<Project> searchByCategoryOrStatus(String categoryOrStatus);
+
+
 }

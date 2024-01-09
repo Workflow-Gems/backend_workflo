@@ -6,12 +6,14 @@ import com.workflo.workflo_backend.exceptions.WorkFloException;
 import com.workflo.workflo_backend.project.dtos.request.CreateProjectRequest;
 import com.workflo.workflo_backend.project.dtos.response.ProjectProjection;
 import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
+import com.workflo.workflo_backend.project.entities.Project;
 import com.workflo.workflo_backend.project.entities.ProjectCategory;
 import com.workflo.workflo_backend.project.service.ProjectService;
 import com.workflo.workflo_backend.vacancy.dtos.request.VacancyRequest;
 import com.workflo.workflo_backend.vacancy.dtos.response.VacancyResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,4 +69,9 @@ public class ProjectController {
                                                       @PathVariable Long mId) throws WorkFloException{
         return ResponseEntity.ok().body(projectService.removeProjectMember(id, mId, pId));
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<Project>> searchByProjectByCategoryOrStatus(@RequestParam String categoryOrStatus){
+        return new ResponseEntity<>(projectService.searchByCategoryOrStatus(categoryOrStatus), HttpStatus.OK);
+    }
+
 }

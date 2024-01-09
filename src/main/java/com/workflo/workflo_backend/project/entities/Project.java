@@ -43,6 +43,9 @@ public class Project {
     private ProjectStatus projectStatus;
     @OneToOne(fetch = EAGER, cascade = ALL, mappedBy = "project")
     private Vacancy vacancy;
+
+    @OneToMany
+    private List<Invitation> invitationsSent;
     @PrePersist
     private void setCreationMark(){
         this.creationMark = LocalDateTime.now();
