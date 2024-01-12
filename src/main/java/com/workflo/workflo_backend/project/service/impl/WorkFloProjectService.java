@@ -123,4 +123,9 @@ public class WorkFloProjectService implements ProjectService {
         project.setProjectStatus(ONGOING);
         return repository.save(project);
     }
+    @Override
+    public List<Project> searchByCategoryOrStatus(String categoryOrStatus) {
+        return repository.findProjectsByCategoryOrProjectStatus(categoryOrStatus);
+    }
+
 }

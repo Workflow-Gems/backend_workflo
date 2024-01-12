@@ -11,4 +11,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Long countProjects(Long id);
     @Query("Select p from Project p where p.creatorId.id=:userId")
     List<Project> findByUserId(Long userId);
+    List<Project> findProjectsByCategoryOrProjectStatus(String categoryOrStatus);
+
 }

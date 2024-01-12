@@ -10,9 +10,11 @@ import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.ProfileResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
+import com.workflo.workflo_backend.user.models.Profile;
 import com.workflo.workflo_backend.user.services.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,4 +96,9 @@ public class UserController {
                                                                                    ProjectNotExistException {
         return ResponseEntity.ok().body(userService.viewJoinedProjectsByUser(id));
     }
+    @GetMapping("/user/search")
+    public ResponseEntity<List<Profile>> searchByJobTitleOrSkills(@RequestParam String jobTitleOrSkill){
+        return new ResponseEntity<>(userService.searchByJobTitleOrSkills(jobTitleOrSkill), HttpStatus.OK);
+    }
+
 }

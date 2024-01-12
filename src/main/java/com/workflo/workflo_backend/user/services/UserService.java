@@ -6,6 +6,7 @@ import com.workflo.workflo_backend.project.dtos.response.ProjectResponse;
 import com.workflo.workflo_backend.user.dtos.request.*;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
+import com.workflo.workflo_backend.user.models.Profile;
 import com.workflo.workflo_backend.user.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,4 +56,8 @@ public interface UserService {
     String uploadProfilePicture(long id, MultipartFile multipart) throws UserNotFoundException, CloudUploadException;
 
     List<ProjectResponse> viewJoinedProjectsByUser(long id) throws UserNotFoundException, ProjectNotExistException;
+
+    List<Profile> searchByJobTitleOrSkills(String jobTitleOrSkill);
+
+
 }

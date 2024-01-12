@@ -1,6 +1,7 @@
 package com.workflo.workflo_backend.user.models;
 
 import com.workflo.workflo_backend.join_project.models.JoinProject;
+import com.workflo.workflo_backend.project.entities.Invitation;
 import com.workflo.workflo_backend.project.entities.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -48,4 +49,6 @@ public class User {
     private Set<Project> joinedProjects;
     @OneToMany(mappedBy = "user")
     private List<JoinProject> requestedProject;
+    @OneToMany
+    private List<Invitation> invitationsReceived;
 }

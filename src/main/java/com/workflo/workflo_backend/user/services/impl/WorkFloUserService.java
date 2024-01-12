@@ -18,6 +18,7 @@ import com.workflo.workflo_backend.user.models.Address;
 import com.workflo.workflo_backend.user.models.Profile;
 import com.workflo.workflo_backend.user.models.User;
 import com.workflo.workflo_backend.user.repository.UserRepository;
+import com.workflo.workflo_backend.user.services.ProfileService;
 import com.workflo.workflo_backend.user.services.TokenService;
 import com.workflo.workflo_backend.user.services.UserService;
 import jakarta.transaction.Transactional;
@@ -43,6 +44,7 @@ import static com.workflo.workflo_backend.user.models.UserStatus.PENDING;
 public class WorkFloUserService implements UserService {
 
     private final UserRepository userRepository;
+    private final ProfileService profileService;
     private final ModelMapper modelMapper;
     private final CloudService cloudService;
     private final TokenService tokenService;
@@ -216,4 +218,10 @@ public class WorkFloUserService implements UserService {
         User user = getUserWithId(id);
         return modelMapper.map(user, FoundUserResponse.class);
     }
+
+    @Override
+    public List<Profile> searchByJobTitleOrSkills(String jobTitleOrSkill) {
+        return profileService.searchProfile(jobTitleOrSkill);
+    }
+
 }
