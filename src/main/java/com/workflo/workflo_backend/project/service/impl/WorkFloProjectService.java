@@ -125,7 +125,8 @@ public class WorkFloProjectService implements ProjectService {
     }
     @Override
     public List<Project> searchByCategoryOrStatus(String categoryOrStatus) {
-        return repository.findProjectsByCategoryOrProjectStatus(categoryOrStatus);
+//        return repository.findProjectsByCategoryOrProjectStatus(categoryOrStatus);
+        return null;
     }
 
 }
