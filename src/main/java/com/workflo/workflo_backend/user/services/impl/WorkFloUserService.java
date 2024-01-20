@@ -238,4 +238,9 @@ public class WorkFloUserService implements UserService, UserDetailsService {
         return profileService.searchProfile(jobTitleOrSkill);
     }
 
+    @Override
+    public User getUserWithMail(String email) {
+        return getUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException(""));
+    }
+
 }

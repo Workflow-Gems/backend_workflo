@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+import static com.workflo.workflo_backend.appConfig.config.AppConfig.MAIL_API_KEY;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 
@@ -27,7 +28,7 @@ public class MailConfig {
     @Bean
     public HttpHeaders httpHeaders(){
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("api-key", apiKey);
+        httpHeaders.set(MAIL_API_KEY, apiKey);
         httpHeaders.setAccept(List.of(APPLICATION_JSON));
         httpHeaders.setContentType(APPLICATION_JSON);
         return httpHeaders;

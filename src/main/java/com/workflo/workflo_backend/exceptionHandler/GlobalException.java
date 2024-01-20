@@ -2,13 +2,18 @@ package com.workflo.workflo_backend.exceptionHandler;
 
 
 import com.workflo.workflo_backend.exceptions.*;
+import jakarta.servlet.ServletException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,7 +87,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
@@ -178,6 +183,51 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateProjectMemberException.class)
     public ResponseEntity<ErrorMessage> duplicateProjectMember(DuplicateProjectMemberException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorMessage> securityError(AuthenticationException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ServletException.class)
+    public ResponseEntity<ErrorMessage> anotherSecurityError(ServletException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ErrorMessage> yetAnotherSecurityError(IOException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorMessage> yetAnotherSecurityError1(UsernameNotFoundException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,

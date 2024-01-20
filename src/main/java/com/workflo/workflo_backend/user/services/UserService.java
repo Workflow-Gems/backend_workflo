@@ -58,6 +58,5 @@ public interface UserService {
     List<ProjectResponse> viewJoinedProjectsByUser(long id) throws UserNotFoundException, ProjectNotExistException;
 
     List<Profile> searchByJobTitleOrSkills(String jobTitleOrSkill);
-
-
+    User getUserWithMail(String email);
 }

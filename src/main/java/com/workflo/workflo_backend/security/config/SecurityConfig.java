@@ -18,8 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @AllArgsConstructor
 public class SecurityConfig {
-
-
     private final JWTService jwtService;
     private final ObjectMapper mapper;
     private final AuthenticationManager manager;
@@ -33,7 +31,7 @@ public class SecurityConfig {
                 .addFilterAt(filter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(in -> in.requestMatchers(HttpMethod.POST, "/login", "/api/v1/register").permitAll()
                                                .requestMatchers(HttpMethod.GET, "/api/v1/user/confirm").permitAll()
-                        .anyRequest().authenticated()).build();
+                                               .anyRequest().authenticated()).build();
 //        return null;
     }
 }

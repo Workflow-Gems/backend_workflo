@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.workflo.workflo_backend.exceptionHandler.errorMessages.ProjectException.PROJECT_OWNER_EXCEPTION;
+
 @Service
 @AllArgsConstructor
 public class WorkFloRequestVacancy implements RequestVacancy{
@@ -25,7 +27,7 @@ public class WorkFloRequestVacancy implements RequestVacancy{
         if (confirmVacancyOwner(vacancy, request.getUserId())) {
             return requestService.getVacancyRequests(request.getVacancyId(), request.getStatus());
         }
-        throw new ProjectOwnerException("Only project owner allowed to view project bid request...");
+        throw new ProjectOwnerException(PROJECT_OWNER_EXCEPTION);
     }
     private boolean confirmVacancyOwner(Vacancy vacancy, Long id){
         return vacancy.getProject().getCreatorId().getId().equals(id);

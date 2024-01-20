@@ -9,8 +9,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.thymeleaf.context.Context;
 
+import javax.swing.plaf.PanelUI;
+
 @Configuration
 public class AppConfig {
+
+    public static final String CLOUD_NAME = "cloud_name";
+    public static final String API_KEY = "api_key";
+    public static final String API_SECRET = "api_secret";
+    public static final String SECURE = "secure";
+    public static final String RESOURCE_TYPE = "resource_type";
+    public static final String FOLDER = "folder";
+    public static final String CLOUD_URL = "secure_url";
+
+    public static final String MAIL_API_KEY = "api-key";
+
 
     @Bean
     public ModelMapper modelMapper(){
