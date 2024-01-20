@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
+import static com.workflo.workflo_backend.appConfig.config.AppConfig.*;
+
 @Configuration
 public class CloudConfig {
 
@@ -27,12 +29,12 @@ public class CloudConfig {
     @Bean
     public Cloudinary cloudinary(){
         Map<?, ?> param = ObjectUtils.asMap(
-                "cloud_name", cloudName,
-                        "api_key", apiKey,
-                        "api_secret", apiSecret,
-                        "secure", true,
-                        "resource_type", resourceType,
-                        "folder", folderName
+                CLOUD_NAME, cloudName,
+                        API_KEY, apiKey,
+                        API_SECRET, apiSecret,
+                        SECURE, true,
+                        RESOURCE_TYPE, resourceType,
+                        FOLDER, folderName
         );
         return new Cloudinary(param);
     }

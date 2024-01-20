@@ -22,7 +22,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter@Setter
-@ToString
+//@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = IDENTITY)

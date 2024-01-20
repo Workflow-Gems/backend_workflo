@@ -16,6 +16,7 @@ public class WorkfloProfileService implements ProfileService {
 
     @Override
     public List<Profile> searchProfile(String jobTitleOrSkill) {
-        return profileRepository.findProfilesByJobTitleOrSkillsIn(jobTitleOrSkill);
+//        return profileRepository.findProfilesByJobTitleOrSkillsIn(jobTitleOrSkill);
+        return null;
     }
 }

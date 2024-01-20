@@ -1,26 +1,26 @@
 #db configuration
-Spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: Sista_1%
-    url: jdbc:mysql://localhost:3306/workflo_db
-  jpa:
-    #    show-sql: true
-    hibernate:
-      ddl-auto: update
-    generate-ddl: true
-#spring:
+#Spring:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    username: root
-#    password: OnColosOnColos365
+#    password: Sista_1%
 #    url: jdbc:mysql://localhost:3306/workflo_db
 #  jpa:
-##    show-sql: true
+#    #    show-sql: true
 #    hibernate:
 #      ddl-auto: update
 #    generate-ddl: true
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: OnColosOnColos365
+    url: jdbc:mysql://localhost:3306/workflo_db
+  jpa:
+#    show-sql: true
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
 #spring:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver

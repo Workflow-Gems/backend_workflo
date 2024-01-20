@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.workflo.workflo_backend.appConfig.config.AppConfig.CLOUD_URL;
+
 
 @Service
 @AllArgsConstructor
@@ -21,7 +23,7 @@ public class CloudinaryCloudService implements CloudService {
     public String upload(MultipartFile file) throws CloudUploadException {
         try {
             Map<?, ?> result = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-            return result.get("secure_url").toString();
+            return result.get(CLOUD_URL).toString();
         }catch (IOException e){
             throw new CloudUploadException(e.getMessage());
         }

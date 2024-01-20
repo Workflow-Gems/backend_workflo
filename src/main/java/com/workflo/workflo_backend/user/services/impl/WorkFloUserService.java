@@ -13,10 +13,7 @@ import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
-import com.workflo.workflo_backend.user.models.Account;
-import com.workflo.workflo_backend.user.models.Address;
-import com.workflo.workflo_backend.user.models.Profile;
-import com.workflo.workflo_backend.user.models.User;
+import com.workflo.workflo_backend.user.models.*;
 import com.workflo.workflo_backend.user.repository.UserRepository;
 import com.workflo.workflo_backend.user.services.ProfileService;
 import com.workflo.workflo_backend.user.services.TokenService;
@@ -25,15 +22,19 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+import static com.workflo.workflo_backend.appConfig.AppUtils.LOCAL_HOST;
 import static com.workflo.workflo_backend.user.models.UserStatus.ACTIVE;
 import static com.workflo.workflo_backend.user.models.UserStatus.PENDING;
 
@@ -41,7 +42,7 @@ import static com.workflo.workflo_backend.user.models.UserStatus.PENDING;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class WorkFloUserService implements UserService {
+public class WorkFloUserService implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final ProfileService profileService;
@@ -50,6 +51,7 @@ public class WorkFloUserService implements UserService {
     private final TokenService tokenService;
     private final MailService mailService;
     private final Context context;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -60,9 +62,10 @@ public class WorkFloUserService implements UserService {
         User savedUser = createUserAccount(request);
         return generatedUserResponse(savedUser);
     }
-    @Transactional
+//    @Transactional
     private User createUserAccount(UserRequest request) throws SendMailException {
         Account account = modelMapper.map(request, Account.class);
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
         User user = modelMapper.map(request, User.class);
         user.setAccount(account);
         user.setUserStatus(PENDING);
@@ -72,8 +75,7 @@ public class WorkFloUserService implements UserService {
     }
     private void createMailRequest(User user) throws SendMailException {
         String token = tokenService.generateToken(user);
-        String locator = "https://backendworkflo-production.up.railway.app/api/v1/user/confirm?email=%s&token=%s";
-        String url = String.format(locator,user.getEmail(), token);
+        String url = String.format(LOCAL_HOST,user.getEmail(), token);
         setContext(user, url);
     }
     private void setContext(User user, String url) throws SendMailException {
@@ -212,6 +214,18 @@ public class WorkFloUserService implements UserService {
         Account account = user.getAccount();
         return new ExtractedUpdate(address, profile, account);
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findUserByEmail(username)
+                                  .orElseThrow(()-> new UsernameNotFoundException("user not found"));
+
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getUserStatus().name()));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+                                                                      user.getAccount().getPassword(),
+                                                                      authorities);
+    }
     private record ExtractedUpdate(Address address, Profile profile, Account account) {
     }
     public FoundUserResponse getUserById(Long id) throws UserNotFoundException {
@@ -222,6 +236,11 @@ public class WorkFloUserService implements UserService {
     @Override
     public List<Profile> searchByJobTitleOrSkills(String jobTitleOrSkill) {
         return profileService.searchProfile(jobTitleOrSkill);
+    }
+
+    @Override
+    public User getUserWithMail(String email) {
+        return getUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException(""));
     }
 
 }

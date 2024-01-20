@@ -15,7 +15,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 //    List<Profile> searchProfile(@Param("jobTitle") String jobTitle, @Param("skills") List<String> skills);
 
 
-            List<Profile> findProfilesByJobTitleOrSkillsIn(String jobTitleOrSkill);
+//            List<Profile> findProfilesByJobTitleOrSkillsIn(String jobTitleOrSkill);
 
 
 }
