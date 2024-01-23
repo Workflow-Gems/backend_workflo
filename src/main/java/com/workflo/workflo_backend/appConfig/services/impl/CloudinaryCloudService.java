@@ -4,7 +4,6 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.workflo.workflo_backend.appConfig.services.CloudService;
 import com.workflo.workflo_backend.exceptions.CloudUploadException;
-import com.workflo.workflo_backend.exceptions.WorkFloException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

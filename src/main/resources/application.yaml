@@ -10,28 +10,28 @@
 #    hibernate:
 #      ddl-auto: update
 #    generate-ddl: true
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: OnColosOnColos365
-    url: jdbc:mysql://localhost:3306/workflo_db
-  jpa:
-#    show-sql: true
-    hibernate:
-      ddl-auto: create
-    generate-ddl: true
 #spring:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    username: root
-#    password: FFB4cH22-5d-D-fF5haG-DG53bGBGDA5
-#    url: jdbc:mysql://roundhouse.proxy.rlwy.net:43771/railway
+#    password: OnColosOnColos365
+#    url: jdbc:mysql://localhost:3306/workflo_db
 #  jpa:
 ##    show-sql: true
 #    hibernate:
-#      ddl-auto: update
+#      ddl-auto: create
 #    generate-ddl: true
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: DB_PASSWORD
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:work_flo}
+  jpa:
+#    show-sql: true
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
 
 #  jpa:
 #    database: mysql
@@ -52,5 +52,5 @@ cloudinary:
 brevo:
   mail:
     api:
-      key: "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"
+      key: ${BREVO_KEY}
       url: "https://api.brevo.com/v3/smtp/email"

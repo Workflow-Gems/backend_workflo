@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.workflo.workflo_backend.appConfig.AppUtils.LOCAL_HOST;
 import static com.workflo.workflo_backend.user.models.UserStatus.ACTIVE;
@@ -241,6 +242,15 @@ public class WorkFloUserService implements UserService, UserDetailsService {
     @Override
     public User getUserWithMail(String email) {
         return getUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException(""));
+    }
+
+
+    @Override
+    public List<FoundUserResponse> searchByJobTitle(String jobTitle) {
+        List<User> foundUsers = userRepository.findByJobTitle(jobTitle);
+        List<FoundUserResponse> projected = new ArrayList<>();
+        foundUsers.forEach(user -> projected.add(modelMapper.map(user, FoundUserResponse.class)));
+        return projected;
     }
 
 }
