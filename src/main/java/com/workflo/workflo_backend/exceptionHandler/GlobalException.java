@@ -53,7 +53,7 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(new ErrorMessage(
                 error,
                 BAD_GATEWAY,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         ));
     }
@@ -65,7 +65,7 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(new ErrorMessage(
                 error,
                 BAD_GATEWAY,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         ));
     }
@@ -77,7 +77,7 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(new ErrorMessage(
                 error,
                 BAD_GATEWAY,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         ));
     }
@@ -98,7 +98,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
@@ -109,7 +109,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
@@ -120,7 +120,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
@@ -131,7 +131,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
@@ -142,7 +142,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
@@ -153,7 +153,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
@@ -164,7 +164,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
@@ -175,7 +175,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
@@ -186,7 +186,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
@@ -197,7 +197,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
@@ -208,7 +208,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
@@ -219,7 +219,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
@@ -231,7 +231,7 @@ public class GlobalException {
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
-                now(),
+                LocalDate.now(),
                 LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
