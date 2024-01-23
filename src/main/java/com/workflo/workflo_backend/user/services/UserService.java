@@ -59,4 +59,6 @@ public interface UserService {
 
     List<Profile> searchByJobTitleOrSkills(String jobTitleOrSkill);
     User getUserWithMail(String email);
+
+    List<FoundUserResponse> searchByJobTitle(String jobTitle);
 }

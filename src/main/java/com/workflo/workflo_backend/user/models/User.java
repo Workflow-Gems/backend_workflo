@@ -21,6 +21,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 
 @Entity
+@Table(name = "user_table")
 @Getter@Setter
 //@ToString
 public class User {
