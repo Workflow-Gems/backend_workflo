@@ -36,12 +36,12 @@ spring:
 #cloudinary service
 cloudinary:
   cloud:
-    name: dof34kqxr
+    name: ${CLOUDINARY_NAME}
     api:
-      key: 274514264572722
-      secret_key: 1fj0jeQDKCmEgZQT6uM4kiCeyXw
-    resource_type: image
-    folder_name: workflo
+      key: ${CLOUDINARY_KEY}
+      secret_key: ${CLOUDINARY_SECRET_KEY}
+    resource_type: ${CLOUDINARY_RESOURCE_TYPE}
+    folder_name: ${CLOUDINARY_FOLDER_NAME}
 
 
 #brevo sender
@@ -49,4 +49,4 @@ brevo:
   mail:
     api:
       key: ${BREVO_KEY}
-      url: "https://api.brevo.com/v3/smtp/email"
+      url: ${BREVO_URL}
