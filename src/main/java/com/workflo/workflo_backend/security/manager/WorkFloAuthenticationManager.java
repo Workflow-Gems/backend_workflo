@@ -3,6 +3,7 @@ package com.workflo.workflo_backend.security.manager;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,6 @@ public class WorkFloAuthenticationManager implements AuthenticationManager {
         if (authenticationProvider.supports(authentication.getClass())){
             return authenticationProvider.authenticate(authentication);
         }
-        return null;
+        throw new BadCredentialsException("couldn't authenticate request");
     }
 }

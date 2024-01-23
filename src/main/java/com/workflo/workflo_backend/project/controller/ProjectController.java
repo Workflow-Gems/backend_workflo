@@ -25,7 +25,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 @RestController
 @RequestMapping("api/v1/user/project")
 @AllArgsConstructor
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class ProjectController {
     private final ProjectService projectService;
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)

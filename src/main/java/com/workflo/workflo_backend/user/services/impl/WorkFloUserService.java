@@ -13,7 +13,10 @@ import com.workflo.workflo_backend.user.dtos.request.UpdateUserRequest;
 import com.workflo.workflo_backend.user.dtos.request.UserRequest;
 import com.workflo.workflo_backend.user.dtos.response.FoundUserResponse;
 import com.workflo.workflo_backend.user.dtos.response.UserResponse;
-import com.workflo.workflo_backend.user.models.*;
+import com.workflo.workflo_backend.user.models.Account;
+import com.workflo.workflo_backend.user.models.Address;
+import com.workflo.workflo_backend.user.models.Profile;
+import com.workflo.workflo_backend.user.models.User;
 import com.workflo.workflo_backend.user.repository.UserRepository;
 import com.workflo.workflo_backend.user.services.ProfileService;
 import com.workflo.workflo_backend.user.services.TokenService;
@@ -33,9 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static com.workflo.workflo_backend.appConfig.AppUtils.LOCAL_HOST;
 import static com.workflo.workflo_backend.appConfig.AppUtils.SERVER_HOST;
 import static com.workflo.workflo_backend.user.models.UserStatus.ACTIVE;
 import static com.workflo.workflo_backend.user.models.UserStatus.PENDING;
@@ -59,8 +60,10 @@ public class WorkFloUserService implements UserService, UserDetailsService {
     @Transactional
     public UserResponse createUser(UserRequest request) throws SendMailException {
         Optional<User> foundUser = getUserByEmail(request.getEmail());
-        if (foundUser.isPresent()) throw new DuplicatedUserEmailException(
-                String.format("User with this email %s already exist", request.getEmail()));
+        if (foundUser.isPresent()) {
+            throw new DuplicatedUserEmailException(
+                    String.format("User with this email %s already exist", request.getEmail()));
+        }
         User savedUser = createUserAccount(request);
         return generatedUserResponse(savedUser);
     }
