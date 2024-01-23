@@ -3,6 +3,7 @@ package com.workflo.workflo_backend.exceptionHandler;
 
 import com.workflo.workflo_backend.exceptions.*;
 import jakarta.servlet.ServletException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -228,6 +229,17 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorMessage> yetAnotherSecurityError1(UsernameNotFoundException exception){
+        ErrorMessage errorMessage = new ErrorMessage(
+                Map.of("message", exception.getMessage()),
+                FORBIDDEN,
+                LocalDate.now(),
+                LocalTime.now()
+        );
+        return ResponseEntity.status(415).body(errorMessage);
+    }
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorMessage> dataIntegrity(DataIntegrityViolationException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN,
