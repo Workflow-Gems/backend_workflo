@@ -33,6 +33,12 @@ spring:
       ddl-auto: update
     generate-ddl: true
 
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-exception: true
+
 #cloudinary service
 cloudinary:
   cloud:
