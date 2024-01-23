@@ -42,7 +42,7 @@ public class WorkFloAuthenticationFilter extends UsernamePasswordAuthenticationF
                 return authUser;
             }
         } catch (IOException exception){
-            throw new RuntimeException("");
+            throw new RuntimeException("couldn't authenticate user");
         }
         return null;
     }

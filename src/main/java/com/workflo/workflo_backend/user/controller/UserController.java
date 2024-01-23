@@ -28,13 +28,13 @@ import static org.springframework.http.MediaType.*;
 @RestController
 @RequestMapping("/api/v1")
 @AllArgsConstructor
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class UserController {
     private final UserService userService;
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest request)
-                                                                           throws SendMailException {
-        return ResponseEntity.status(CREATED).body(userService.createUser(request));
+                                                                     throws SendMailException {
+            return ResponseEntity.status(CREATED).body(userService.createUser(request));
     }
     @PostMapping("/user/address")
     public ResponseEntity<String> createAddress(@Valid @RequestBody AddressRequest request)

@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import java.util.Map;
 public class ErrorMessage {
     private Map<String, String> message;
     private HttpStatus status;
-    private LocalDate date;
-    private LocalTime time;
+//    private LocalDateTime dateTime;
+//    private LocalDate date;
+//    private LocalTime time;
 }

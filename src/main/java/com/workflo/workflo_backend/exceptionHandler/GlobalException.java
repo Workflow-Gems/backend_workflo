@@ -33,8 +33,8 @@ public class GlobalException {
                 error.put(e.getField(), e.getDefaultMessage())
         );
         ErrorMessage message = ErrorMessage.builder()
-                .message(error).status(BAD_GATEWAY)
-                .date(now()).time(LocalTime.now()).build();
+                .message(error).status(BAD_GATEWAY).build();
+//                .date(now()).time(LocalTime.now()).build();
         return ResponseEntity.badRequest().body(message);
     }
     @ExceptionHandler(UserNotFoundException.class)
@@ -42,8 +42,8 @@ public class GlobalException {
         Map<String, String> error = new HashMap<>();
         error.put("message", exception.getMessage());
         ErrorMessage message = ErrorMessage.builder()
-                .message(error).status(BAD_GATEWAY)
-                .date(now()).time(LocalTime.now()).build();
+                .message(error).status(BAD_GATEWAY).build();
+//                .date(now()).time(LocalTime.now()).build();
         return ResponseEntity.badRequest().body(message);
     }
     @ResponseStatus(BAD_GATEWAY)
@@ -53,9 +53,9 @@ public class GlobalException {
         error.put("error-message", exception.getMessage());
         return ResponseEntity.badRequest().body(new ErrorMessage(
                 error,
-                BAD_GATEWAY,
-                LocalDate.now(),
-                LocalTime.now()
+                BAD_GATEWAY
+//                LocalDate.now(),
+//                LocalTime.now()
         ));
     }
     @ResponseStatus(BAD_GATEWAY)
@@ -65,9 +65,9 @@ public class GlobalException {
         error.put("error-message", exception.getMessage());
         return ResponseEntity.badRequest().body(new ErrorMessage(
                 error,
-                BAD_GATEWAY,
-                LocalDate.now(),
-                LocalTime.now()
+                BAD_GATEWAY
+//                LocalDate.now(),
+//                LocalTime.now()
         ));
     }
     @ResponseStatus(BAD_GATEWAY)
@@ -77,9 +77,9 @@ public class GlobalException {
         error.put("error-message", exception.getMessage());
         return ResponseEntity.badRequest().body(new ErrorMessage(
                 error,
-                BAD_GATEWAY,
-                LocalDate.now(),
-                LocalTime.now()
+                BAD_GATEWAY
+//                LocalDate.now(),
+//                LocalTime.now()
         ));
     }
     @ResponseStatus(FORBIDDEN)
@@ -87,9 +87,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> tokenError(TokenExceptions exceptions){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
     }
@@ -98,9 +98,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> unverified(UserNotVerifiedException exceptions){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
     }
@@ -109,9 +109,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> unverified(ProjectNotExistException exceptions){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
     }
@@ -120,9 +120,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> projectNotMatch(ProjectAndUserNotMatchException exceptions){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
     }
@@ -131,9 +131,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> projectOwner(ProjectOwnerException exceptions){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exceptions.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.badRequest().body(errorMessage);
     }
@@ -142,9 +142,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> vacancyError(VacancyNotCreatedException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }
@@ -153,9 +153,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> vacancyError(UpdateNotAllowedException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }
@@ -164,9 +164,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> vacancyError(VacancyNotFoundException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }
@@ -175,9 +175,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> bidRequestNotAllowed(BidRequestNotAllowedException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }
@@ -186,9 +186,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> duplicateProjectMember(DuplicateProjectMemberException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }
@@ -197,9 +197,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> securityError(AuthenticationException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }
@@ -208,9 +208,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> anotherSecurityError(ServletException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }
@@ -219,9 +219,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> yetAnotherSecurityError(IOException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }
@@ -231,9 +231,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> yetAnotherSecurityError1(UsernameNotFoundException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }
@@ -242,9 +242,9 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> dataIntegrity(DataIntegrityViolationException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
-                FORBIDDEN,
-                LocalDate.now(),
-                LocalTime.now()
+                FORBIDDEN
+//                LocalDate.now(),
+//                LocalTime.now()
         );
         return ResponseEntity.status(415).body(errorMessage);
     }

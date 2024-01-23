@@ -2,6 +2,7 @@ package com.workflo.workflo_backend.security.provider;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -27,7 +28,7 @@ public class WorkFloAuthenticationProvider implements AuthenticationProvider {
             return new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
                                                     null, userDetails.getAuthorities());
         }
-        return null;
+        throw new BadCredentialsException("User could not be verified");
     }
     @Override
     public boolean supports(Class<?> authentication) {
