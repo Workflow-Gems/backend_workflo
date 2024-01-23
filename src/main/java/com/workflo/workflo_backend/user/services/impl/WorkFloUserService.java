@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.workflo.workflo_backend.appConfig.AppUtils.LOCAL_HOST;
+import static com.workflo.workflo_backend.appConfig.AppUtils.SERVER_HOST;
 import static com.workflo.workflo_backend.user.models.UserStatus.ACTIVE;
 import static com.workflo.workflo_backend.user.models.UserStatus.PENDING;
 
@@ -76,7 +77,8 @@ public class WorkFloUserService implements UserService, UserDetailsService {
     }
     private void createMailRequest(User user) throws SendMailException {
         String token = tokenService.generateToken(user);
-        String url = String.format(LOCAL_HOST,user.getEmail(), token);
+        String server = SERVER_HOST+"/api/v1/user/confirm?email=%s&token=%s";
+        String url = String.format(server,user.getEmail(), token);
         setContext(user, url);
     }
     private void setContext(User user, String url) throws SendMailException {

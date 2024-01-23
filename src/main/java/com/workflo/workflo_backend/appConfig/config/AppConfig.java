@@ -24,6 +24,8 @@ public class AppConfig {
 
     public static final String MAIL_API_KEY = "api-key";
 
+//    public static String BASEURL = "backendworkflo-production.up.railway.app";
+
 
     @Bean
     public ModelMapper modelMapper(){
