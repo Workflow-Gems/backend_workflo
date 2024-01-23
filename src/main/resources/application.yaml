@@ -48,5 +48,5 @@ cloudinary:
 brevo:
   mail:
     api:
-      key: "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"
+      key: ${BREVO_KEY}
       url: "https://api.brevo.com/v3/smtp/email"
