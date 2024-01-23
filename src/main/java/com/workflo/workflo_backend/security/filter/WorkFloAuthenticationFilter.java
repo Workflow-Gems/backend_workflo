@@ -1,6 +1,7 @@
 package com.workflo.workflo_backend.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.workflo.workflo_backend.exceptions.UserNotVerifiedException;
 import com.workflo.workflo_backend.security.config.JWTService;
 import com.workflo.workflo_backend.user.dtos.request.LoginRequest;
 import com.workflo.workflo_backend.user.dtos.response.LoginResponse;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -42,9 +44,9 @@ public class WorkFloAuthenticationFilter extends UsernamePasswordAuthenticationF
                 return authUser;
             }
         } catch (IOException exception){
-            throw new RuntimeException("couldn't authenticate user");
+            throw new BadCredentialsException("failed to verify user with provided credentials");
         }
-        return null;
+        throw new RuntimeException("couldn't authenticate user");
     }
     @Override
     protected void successfulAuthentication(HttpServletRequest request,

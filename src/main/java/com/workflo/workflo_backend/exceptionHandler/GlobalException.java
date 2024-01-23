@@ -3,9 +3,9 @@ package com.workflo.workflo_backend.exceptionHandler;
 
 import com.workflo.workflo_backend.exceptions.*;
 import jakarta.servlet.ServletException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,12 +14,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.time.LocalDate.now;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
@@ -238,8 +235,8 @@ public class GlobalException {
         return ResponseEntity.status(415).body(errorMessage);
     }
     @ResponseStatus(FORBIDDEN)
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorMessage> dataIntegrity(DataIntegrityViolationException exception){
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorMessage> badCredentials(BadCredentialsException exception){
         ErrorMessage errorMessage = new ErrorMessage(
                 Map.of("message", exception.getMessage()),
                 FORBIDDEN
