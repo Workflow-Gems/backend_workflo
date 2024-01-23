@@ -23,20 +23,16 @@
 #    generate-ddl: true
 spring:
   datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     driver-class-name: org.postgresql.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: jdbc:postgresql://${DB_HOST}/${DB_PORT}/${DB_NAME}
   jpa:
 #    show-sql: true
     hibernate:
       ddl-auto: update
     generate-ddl: true
 
-#  jpa:
-#    database: mysql
-#  config:
-#    location: classpath:/src/main/resources/workflo.yaml
 #cloudinary service
 cloudinary:
   cloud:
