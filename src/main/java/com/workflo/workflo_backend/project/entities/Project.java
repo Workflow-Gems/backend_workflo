@@ -44,7 +44,7 @@ public class Project {
     @OneToOne(fetch = EAGER, cascade = ALL, mappedBy = "project")
     private Vacancy vacancy;
 
-    @OneToMany
+    @OneToMany //(mappedBy = "project")
     private List<Invitation> invitationsSent;
     @PrePersist
     private void setCreationMark(){

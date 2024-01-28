@@ -49,6 +49,6 @@ public class User {
     private Set<Project> joinedProjects;
     @OneToMany(mappedBy = "user")
     private List<JoinProject> requestedProject;
-    @OneToMany
+    @OneToMany //(mappedBy = "user")
     private List<Invitation> invitationsReceived;
 }
